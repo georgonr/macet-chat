@@ -84,3 +84,9 @@ website/test/stubs-layout-cache/_includes/*.js
 apps/android/app/release
 apps/multiplatform/.kotlin/sessions
 
+
+# Macet release signing - never commit these
+keystore.properties
+*.keystore
+*.jks
+apps/multiplatform/local.properties

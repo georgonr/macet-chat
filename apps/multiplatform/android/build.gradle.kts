@@ -8,8 +8,27 @@ plugins {
     id("org.jetbrains.kotlin.plugin.compose")
 }
 
+// Release signing. Credentials live in apps/multiplatform/keystore.properties, which is
+// git-ignored - see README of this fork. Without that file the release build is left unsigned
+// so that the project still configures on a machine that has no signing key.
+val keystoreProperties = java.util.Properties().apply {
+    val f = rootProject.file("keystore.properties")
+    if (f.exists()) f.inputStream().use { load(it) }
+}
+
 android {
     compileSdk = 35
+
+    signingConfigs {
+        if (keystoreProperties.isNotEmpty()) {
+            create("release") {
+                storeFile = rootProject.file(keystoreProperties["storeFile"] as String)
+                storePassword = keystoreProperties["storePassword"] as String
+                keyAlias = keystoreProperties["keyAlias"] as String
+                keyPassword = keystoreProperties["keyPassword"] as String
+            }
+        }
+    }
 
     defaultConfig {
         applicationId = "eu.macet.chat"
@@ -47,6 +66,7 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            signingConfig = signingConfigs.findByName("release")
         }
     }
     kotlinOptions {
