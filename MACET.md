@@ -37,9 +37,14 @@ So the configuration is enforced over the chat API instead, in
 * the operator-less server group — the group used for new connections — is set to exactly the
   Macet SMP and XFTP server, enabled.
 
-This runs on every chat start for every profile, and again right after a profile is created.
+This runs on every chat start for every profile, and again right after a profile is created while
+the chat is already running. It has to run *after* `apiStartChat` — the core answers both server
+commands with `chatNotStarted` before that, which on a fresh install used to leave the preset
+operators enabled and visible.
+
 The onboarding operator picker and the preset-operator rows in *Network & servers* are removed,
-so the disabled upstream operators are neither shown nor re-enableable.
+so the disabled upstream operators are neither shown nor re-enableable. Both platforms share this
+code; it lives in `commonMain` and the desktop app uses it through the same `ChatController`.
 
 ## Building
 
