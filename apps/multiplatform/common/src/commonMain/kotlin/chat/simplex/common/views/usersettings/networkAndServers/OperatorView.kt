@@ -680,7 +680,11 @@ private fun SingleOperatorUsageConditionsView(
   }
 }
 
-val defaultConditionsLink = "https://github.com/simplex-chat/simplex-chat/blob/stable/PRIVACY.md"
+// Macet runs the only servers of this build, so the conditions and the privacy policy are this
+// fork's own document, not the upstream operators' one - see PRIVACY.md in the repository root.
+val defaultConditionsLink = "https://github.com/georgonr/macet-chat/blob/macet-brand/PRIVACY.md"
+// Upstream linked the commit that last changed the conditions; ours are tracked in the file history.
+val conditionsHistoryLink = "https://github.com/georgonr/macet-chat/commits/macet-brand/PRIVACY.md"
 
 @Composable
 fun ConditionsTextView(
@@ -697,7 +701,7 @@ fun ConditionsTextView(
         val conditions = getUsageConditions(rh = rhId)
 
         if (conditions != null) {
-          val parentLink = "https://github.com/simplex-chat/simplex-chat/blob/${conditions.first.conditionsCommit}"
+          val parentLink = "https://github.com/georgonr/macet-chat/blob/macet-brand"
           val conditionsText = conditions.second
           val preparedText = if (conditionsText != null) prepareMarkdown(conditionsText.trimIndent(), parentLink) else null
           val modifiedConditions = Triple(conditions.first, preparedText, conditions.third)
@@ -731,8 +735,7 @@ fun ConditionsTextView(
         }
       }
     } else {
-      val conditionsLink = "https://github.com/simplex-chat/simplex-chat/blob/${usageConditions.conditionsCommit}/PRIVACY.md"
-      ConditionsLinkView(conditionsLink)
+      ConditionsLinkView(defaultConditionsLink)
     }
   } else if (failedToLoad.value) {
     ConditionsLinkView(defaultConditionsLink)
@@ -818,16 +821,13 @@ fun ConditionsLinkButton() {
   val oneHandUI = remember { appPrefs.oneHandUI.state }
   Column {
     DefaultDropdownMenu(showMenu, offset = if (oneHandUI.value) DpOffset(0.dp, -AppBarHeight * fontSizeSqrtMultiplier * 3) else DpOffset.Zero) {
-      val commit = chatModel.conditions.value.currentConditions.conditionsCommit
       ItemAction(stringResource(MR.strings.operator_open_conditions), painterResource(MR.images.ic_draft), onClick = {
-        val mdUrl = "https://github.com/simplex-chat/simplex-chat/blob/$commit/PRIVACY.md"
         showMenu.value = false
-        uriHandler.openExternalLink(mdUrl)
+        uriHandler.openExternalLink(defaultConditionsLink)
       })
       ItemAction(stringResource(MR.strings.operator_open_changes), painterResource(MR.images.ic_more_horiz), onClick = {
-        val commitUrl = "https://github.com/simplex-chat/simplex-chat/commit/$commit"
         showMenu.value = false
-        uriHandler.openExternalLink(commitUrl)
+        uriHandler.openExternalLink(conditionsHistoryLink)
       })
     }
     IconButton({ showMenu.value = true }) {

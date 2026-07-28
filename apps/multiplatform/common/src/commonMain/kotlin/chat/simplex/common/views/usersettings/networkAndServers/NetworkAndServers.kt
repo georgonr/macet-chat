@@ -764,7 +764,6 @@ fun UsageConditionsView(
   @Composable
   fun ConditionsDiffButton() {
     val uriHandler = LocalUriHandler.current
-    val commit = chatModel.conditions.value.currentConditions.conditionsCommit
     Column (
       modifier = Modifier.fillMaxWidth(),
       horizontalAlignment = Alignment.CenterHorizontally
@@ -773,8 +772,7 @@ fun UsageConditionsView(
         modifier = Modifier
           .clip(shape = CircleShape)
           .clickable {
-            val commitUrl = "https://github.com/simplex-chat/simplex-chat/commit/$commit"
-            uriHandler.openExternalLink(commitUrl)
+            uriHandler.openExternalLink(conditionsHistoryLink)
           }
           .padding(horizontal = 6.dp, vertical = 4.dp),
         verticalAlignment = Alignment.CenterVertically,
