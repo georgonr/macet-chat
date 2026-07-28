@@ -108,7 +108,9 @@ suspend fun ChatController.applyMacetServersToAllUsers(rh: Long?) {
   try {
     val conditions = getServerOperators(rh)
     if (conditions != null && conditions.serverOperators.any { it.enabled }) {
-      setServerOperators(rh, conditions.serverOperators.map { it.copy(enabled = false) })
+      val updated = setServerOperators(rh, conditions.serverOperators.map { it.copy(enabled = false) })
+      // Keep the model in step, otherwise views that read it keep showing the operators as enabled
+      if (updated != null) chatModel.conditions.value = updated
     }
     listUsers(rh).forEach { applyMacetServers(rh, it.user.userId) }
   } catch (e: Exception) {

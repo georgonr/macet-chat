@@ -293,20 +293,16 @@ private fun SetOperatorsButton(enabled: Boolean, close: () -> Unit) {
 
 private fun acceptConditions(selectedOperatorIds: Set<Long>) {
   withBGApi {
+    val rhId = chatModel.remoteHostId()
     val conditionsId = chatModel.conditions.value.currentConditions.conditionsId
-    val r = chatController.acceptConditions(chatModel.remoteHostId(), conditionsId = conditionsId, operatorIds = selectedOperatorIds.toList())
+    val r = chatController.acceptConditions(rhId, conditionsId = conditionsId, operatorIds = selectedOperatorIds.toList())
     if (r != null) {
       chatModel.conditions.value = r
-      val enabledOps = enabledOperators(r.serverOperators, selectedOperatorIds)
-      if (enabledOps != null) {
-        val r2 = chatController.setServerOperators(rh = chatModel.remoteHostId(), operators = enabledOps)
-        if (r2 != null) {
-          chatModel.conditions.value = r2
-          completeOnboarding()
-        }
-      } else {
-        completeOnboarding()
-      }
+      // Upstream enables the selected preset operators here. Macet is the only operator of this
+      // build, so accepting the conditions must not enable them - it used to undo the work of
+      // applyMacetServers and bring the SimpleX Chat and Flux rows back, see MacetServers.kt.
+      chatController.applyMacetServersToAllUsers(rhId)
+      completeOnboarding()
     }
   }
 }
@@ -327,36 +323,6 @@ private fun AcceptConditionsButton(
 
 private fun completeOnboarding() {
   appPrefs.onboardingStage.set(OnboardingStage.OnboardingComplete)
-}
-
-private fun enabledOperators(operators: List<ServerOperator>, selectedOperatorIds: Set<Long>): List<ServerOperator>? {
-  val ops = ArrayList(operators)
-  if (ops.isNotEmpty()) {
-    for (i in ops.indices) {
-      val op = ops[i]
-      ops[i] = op.copy(enabled = selectedOperatorIds.contains(op.operatorId))
-    }
-    val haveSMPStorage = ops.any { it.enabled && it.smpRoles.storage }
-    val haveSMPProxy = ops.any { it.enabled && it.smpRoles.proxy }
-    val haveXFTPStorage = ops.any { it.enabled && it.xftpRoles.storage }
-    val haveXFTPProxy = ops.any { it.enabled && it.xftpRoles.proxy }
-    val firstEnabledIndex = ops.indexOfFirst { it.enabled }
-    if (haveSMPStorage && haveSMPProxy && haveXFTPStorage && haveXFTPProxy) {
-      return ops
-    } else if (firstEnabledIndex != -1) {
-      var op = ops[firstEnabledIndex]
-      if (!haveSMPStorage) op = op.copy(smpRoles = op.smpRoles.copy(storage = true))
-      if (!haveSMPProxy) op = op.copy(smpRoles = op.smpRoles.copy(proxy = true))
-      if (!haveXFTPStorage) op = op.copy(xftpRoles = op.xftpRoles.copy(storage = true))
-      if (!haveXFTPProxy) op = op.copy(xftpRoles = op.xftpRoles.copy(proxy = true))
-      ops[firstEnabledIndex] = op
-      return ops
-    } else { // Shouldn't happen - view doesn't let to proceed if no operators are enabled
-      return null
-    }
-  } else {
-    return null
-  }
 }
 
 @Composable
