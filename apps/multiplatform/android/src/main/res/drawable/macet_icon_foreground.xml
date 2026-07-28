@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Macet launcher icon - adaptive foreground: white geometric "M" monogram.
-  The glyph is kept inside the central 72x72 safe zone of the 108x108 viewport
-  so that no part of it is clipped by any adaptive icon mask.
+  Macet launcher icon - adaptive foreground.
+
+  Generated from assets/macet-logo.svg: the same polyline and stroke width, scaled from
+  the 512 master viewBox to the 108 adaptive-icon viewport (factor 108/512).
+  The mark spans 23.6..84.4 horizontally and 29.7..78.2 vertically, so it stays inside
+  the central 66 % safe zone (18..90) and is never clipped by an adaptive icon mask.
 -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
@@ -10,6 +13,15 @@
     android:viewportWidth="108"
     android:viewportHeight="108">
   <path
-      android:fillColor="#FFFFFF"
-      android:pathData="M30,78L30,30L43,30L54,52L65,30L78,30L78,78L67,78L67,48L54,74L41,48L41,78Z" />
+      android:pathData="M28.477,73.406 V34.594 L54,64.969 L79.523,34.594 V73.406"
+      android:strokeColor="#FFFFFF"
+      android:strokeWidth="9.703"
+      android:strokeLineCap="round"
+      android:strokeLineJoin="round" />
+  <path
+      android:pathData="M54,64.969 L79.523,34.594"
+      android:strokeColor="#38BDF8"
+      android:strokeWidth="9.703"
+      android:strokeLineCap="round"
+      android:strokeLineJoin="round" />
 </vector>

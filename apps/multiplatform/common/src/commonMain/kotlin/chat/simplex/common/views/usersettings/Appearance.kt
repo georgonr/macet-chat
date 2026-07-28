@@ -64,9 +64,9 @@ object AppearanceScope {
         val size = 60
         Box(Modifier.offset(x = -(size / 12).dp)) {
           if (!image.isNullOrEmpty()) {
-            ProfileImage(size.dp, image, MR.images.ic_simplex_light, color = Color.Unspecified)
+            ProfileImage(size.dp, image, MR.images.ic_macet_light, color = Color.Unspecified)
           } else {
-            ProfileImage(size.dp, if (isInDarkTheme()) MR.images.ic_simplex_light else MR.images.ic_simplex_dark)
+            ProfileImage(size.dp, if (isInDarkTheme()) MR.images.ic_macet_light else MR.images.ic_macet_dark)
           }
         }
         Spacer(Modifier.width(DEFAULT_PADDING_HALF - (size / 12).dp))

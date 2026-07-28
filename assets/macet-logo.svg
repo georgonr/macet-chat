@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Macet Secure Chat - master logo.
+
+  Square tile, background #0F172A, geometric "M" monogram in white with the right
+  diagonal in #38BDF8. Four straight strokes, round caps and joins, no gradients and
+  no shadows, so the mark stays readable down to 16 px.
+
+  All derived assets (adaptive launcher icon, notification icons, store icons and the
+  in-app wordmark) are generated from exactly this geometry:
+    white polyline : 135,348 -> 135,164 -> 256,308 -> 377,164 -> 377,348
+    accent segment : 256,308 -> 377,164
+    stroke width   : 46
+  The mark occupies x 112..400, y 141..371 of the 512 viewBox, i.e. it stays inside the
+  central 66 % of the square, which is the safe zone of an Android adaptive icon.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#0F172A"/>
+  <g fill="none" stroke-width="46" stroke-linecap="round" stroke-linejoin="round">
+    <path stroke="#FFFFFF" d="M135,348 V164 L256,308 L377,164 V348"/>
+    <path stroke="#38BDF8" d="M256,308 L377,164"/>
+  </g>
+</svg>

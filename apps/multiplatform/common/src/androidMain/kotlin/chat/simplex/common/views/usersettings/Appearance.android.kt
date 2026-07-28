@@ -39,8 +39,8 @@ import dev.icerock.moko.resources.compose.painterResource
 import kotlinx.coroutines.delay
 
 enum class AppIcon(val image: ImageResource) {
-  DEFAULT(MR.images.ic_simplex_light),
-  DARK_BLUE(MR.images.ic_simplex_dark),
+  DEFAULT(MR.images.ic_macet_light),
+  DARK_BLUE(MR.images.ic_macet_dark),
 }
 
 @Composable
