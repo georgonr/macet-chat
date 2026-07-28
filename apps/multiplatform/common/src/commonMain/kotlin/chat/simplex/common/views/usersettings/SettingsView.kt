@@ -21,7 +21,6 @@ import dev.icerock.moko.resources.compose.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.*
-import chat.simplex.common.BuildConfigCommon
 import chat.simplex.common.model.*
 import chat.simplex.common.model.ChatController.appPrefs
 import chat.simplex.common.platform.*
@@ -120,14 +119,10 @@ fun SettingsLayout(
       SettingsActionItem(painterResource(MR.images.ic_help), stringResource(MR.strings.how_to_use_simplex_chat), showModal { HelpView(userDisplayName ?: "") }, disabled = stopped)
       SettingsActionItem(painterResource(MR.images.ic_add), stringResource(MR.strings.whats_new), showCustomModal { _, close -> WhatsNewView(viaSettings = true, close = close) }, disabled = stopped)
       SettingsActionItem(painterResource(MR.images.ic_info), stringResource(MR.strings.about_simplex_chat), showModal { SimpleXInfo(it, onboarding = false) })
-    }
-    SectionDividerSpaced()
-
-    SectionView(stringResource(MR.strings.settings_section_title_support)) {
-      if (!BuildConfigCommon.ANDROID_BUNDLE) {
-        ContributeItem(uriHandler)
-      }
-      StarOnGithubItem(uriHandler)
+      // The only link left in the settings: the source of the running build, which the AGPL
+      // requires to be offered. Upstream's "support us" section had a second row pointing at the
+      // very same repository, and asking to star it makes no sense for this fork.
+      ContributeItem(uriHandler)
     }
     SectionDividerSpaced()
 
@@ -204,24 +199,12 @@ fun ChatLockItem(
 @Composable private fun ContributeItem(uriHandler: UriHandler) {
   SectionItemView({ uriHandler.openExternalLink(macetSourceUrl) }) {
     Icon(
-      painterResource(MR.images.ic_keyboard),
+      painterResource(MR.images.ic_github),
       contentDescription = "GitHub",
       tint = MaterialTheme.colors.secondary,
     )
     TextIconSpaced()
     Text(generalGetString(MR.strings.contribute), color = MaterialTheme.colors.primary)
-  }
-}
-
-@Composable private fun StarOnGithubItem(uriHandler: UriHandler) {
-  SectionItemView({ uriHandler.openExternalLink(macetSourceUrl) }) {
-    Icon(
-      painter = painterResource(MR.images.ic_github),
-      contentDescription = "GitHub",
-      tint = MaterialTheme.colors.secondary,
-    )
-    TextIconSpaced()
-    Text(generalGetString(MR.strings.star_on_github), color = MaterialTheme.colors.primary)
   }
 }
 
@@ -243,18 +226,6 @@ fun ChatLockItem(
       checked = remember { pref.state }.value,
       onCheckedChange = onChange,
     )
-  }
-}
-
-@Composable fun InstallTerminalAppItem(uriHandler: UriHandler) {
-  SectionItemView({ uriHandler.openExternalLink(macetSourceUrl) }) {
-    Icon(
-      painter = painterResource(MR.images.ic_github),
-      contentDescription = "GitHub",
-      tint = MaterialTheme.colors.secondary,
-    )
-    TextIconSpaced()
-    Text(generalGetString(MR.strings.install_simplex_chat_for_terminal), color = MaterialTheme.colors.primary)
   }
 }
 
