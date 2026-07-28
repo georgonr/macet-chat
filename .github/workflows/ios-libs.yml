@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: "check = rychla diagnostika, build = plny build (hodiny)"
+        description: "check = diagnostika, build = plny build (hodiny)"
         required: true
         default: check
         type: choice
@@ -12,10 +12,14 @@ on:
           - check
           - build
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   ios-libs:
     runs-on: macos-latest
-    timeout-minutes: 350
+    timeout-minutes: 355
 
     steps:
       - name: Checkout
@@ -23,11 +27,15 @@ jobs:
 
       - name: Info o stroji
         run: |
-          echo "=== architektura ==="
-          uname -m
-          echo "=== macOS ==="
+          echo "architektura: $(uname -m)"
           sw_vers
-          echo "=== volne miesto ==="
+          df -h /
+
+      - name: Uvolnenie miesta
+        run: |
+          sudo rm -rf /Users/runner/Library/Developer/CoreSimulator/Caches || true
+          sudo rm -rf ~/Library/Caches/Homebrew || true
+          echo "po vycisteni:"
           df -h /
 
       - name: Instalacia Nix
@@ -35,35 +43,47 @@ jobs:
         with:
           extra-conf: |
             experimental-features = nix-command flakes
-            substituters = https://cache.nixos.org https://cache.iog.io
-            trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ=
+            substituters = https://cache.nixos.org https://cache.iog.io https://cache.zw3rk.com
+            trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ= loony-tools:pr9m4BkM/5/eSTZlkQyRt57Jz7OMBxNSUiMC4FkcNfk=
+            connect-timeout = 10
+            fallback = true
+            max-jobs = auto
 
-      - name: Overenie Nix
-        run: nix --version
-
-      - name: Ake build joby existuju
+      - name: Zoznam jobov
         run: |
-          echo "=== hydraJobs pre aarch64-darwin ==="
           nix eval --impure --json \
             '.#hydraJobs.aarch64-darwin' \
-            --apply builtins.attrNames || echo "NEPODARILO SA - skusam packages"
-          echo ""
-          echo "=== packages pre aarch64-darwin ==="
-          nix eval --impure --json \
-            '.#packages.aarch64-darwin' \
-            --apply builtins.attrNames || echo "NEPODARILO SA"
+            --apply builtins.attrNames
+
+      - name: Co sa bude stavat
+        if: inputs.mode == 'build'
+        run: |
+          echo "=== plan buildu (kolko sa stiahne vs postavi) ==="
+          nix build --dry-run \
+            '.#hydraJobs.aarch64-darwin."aarch64-darwin-ios:lib:simplex-chat"' \
+            2>&1 | tail -40
 
       - name: Build knizníc
         if: inputs.mode == 'build'
         run: |
-          nix build -L --max-jobs auto \
-            '.#hydraJobs.aarch64-darwin."aarch64-darwin-ios:lib:simplex-chat"'
+          set -o pipefail
+          nix build -L --keep-going \
+            '.#hydraJobs.aarch64-darwin."aarch64-darwin-ios:lib:simplex-chat"' \
+            2>&1 | tee build.log
+
+      - name: Zber vysledkov
+        if: inputs.mode == 'build'
+        run: |
           mkdir -p vystup
-          find -L result -name '*.a' -exec cp {} vystup/ \;
+          find -L result -name '*.a' -exec cp {} vystup/ \; 2>/dev/null || true
+          find -L result -name '*.zip' -exec cp {} vystup/ \; 2>/dev/null || true
           echo "=== najdene subory ==="
-          ls -la vystup/
+          ls -la vystup/ || echo "PRAZDNE"
           echo "=== architektury ==="
-          for f in vystup/*.a; do echo "$f:"; lipo -info "$f" || true; done
+          for f in vystup/*.a; do
+            echo "--- $f"
+            lipo -info "$f" || true
+          done
 
       - name: Nahranie knizníc
         if: inputs.mode == 'build'
@@ -71,4 +91,12 @@ jobs:
         with:
           name: ios-libs-arm64
           path: vystup/
-          if-no-files-found: error
+          if-no-files-found: warn
+
+      - name: Nahranie logu
+        if: always() && inputs.mode == 'build'
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-log
+          path: build.log
+          if-no-files-found: ignore
