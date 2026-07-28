@@ -152,11 +152,29 @@ cmake {
   }
 }
 
-tasks.named("clean") {
-  dependsOn("cmakeClean")
+// This fork uses the Haskell core and its JNI shim as prebuilt binaries - see MACET.md. When
+// libapp-lib is already in place for the host platform there is nothing for CMake to build, and
+// requiring a local CMake/MinGW toolchain would only break the build. Pass -PbuildNativeLibs to
+// build the shim from source anyway.
+val hostLibDir = run {
+  val os = System.getProperty("os.name", "generic").toDefaultLowerCase()
+  val name = if (os.contains("win")) "windows" else if (os.contains("mac")) "mac" else "linux"
+  val arch = System.getProperty("os.arch", "").toDefaultLowerCase()
+  val cpu = if (arch.contains("aarch64") || arch.contains("arm64")) "aarch64" else "x86_64"
+  val ext = if (name == "windows") "dll" else if (name == "mac") "dylib" else "so"
+  project.file("$cppPath/desktop/libs/$name-$cpu/libapp-lib.$ext")
 }
-tasks.named("compileKotlinJvm") {
-  dependsOn("cmakeBuildAndCopy")
+val buildNativeLibs = project.hasProperty("buildNativeLibs") || !hostLibDir.exists()
+
+if (buildNativeLibs) {
+  tasks.named("clean") {
+    dependsOn("cmakeClean")
+  }
+  tasks.named("compileKotlinJvm") {
+    dependsOn("cmakeBuildAndCopy")
+  }
+} else {
+  logger.lifecycle("Using prebuilt native libraries from ${hostLibDir.parentFile}; skipping CMake build")
 }
 afterEvaluate {
   tasks.create("cmakeBuildAndCopy") {

@@ -43,6 +43,8 @@ so the disabled upstream operators are neither shown nor re-enableable.
 
 ## Building
 
+### Android
+
 Requires JDK 17+, the Android SDK with NDK `23.1.7779620` and cmake `3.22.1`.
 
 1. **Core libraries.** The Haskell core is *not* built from source. Take `libsimplex.so` and
@@ -77,3 +79,42 @@ Requires JDK 17+, the Android SDK with NDK `23.1.7779620` and cmake `3.22.1`.
    ```
 
    Output: `apps/multiplatform/android/build/outputs/apk/release/`, split per ABI.
+
+### Windows desktop
+
+Requires JDK 17+ (JDK 21 is what the releases are built with) and the Android SDK, because the
+`common` module is also an Android library. Neither the Haskell core nor its JNI shim is built
+from source, so no MinGW, cmake or GHC is needed.
+
+1. **Native libraries.** `libsimplex.dll` (the Haskell core), `libapp-lib.dll` (the JNI shim),
+   `libcrypto-3-x64.dll` (OpenSSL) and the VLC libraries used for video playback are taken from
+   `simplex-desktop-windows-x86_64.msi` of the upstream release of the same tag:
+
+   ```
+   scripts/macet/download-desktop-libs-windows.sh v6.5.6
+   ```
+
+   It unpacks the installer with `msiexec /a` and produces the layout that
+   `scripts/desktop/build-lib-windows.sh` produces upstream:
+
+   ```
+   apps/multiplatform/common/src/commonMain/cpp/desktop/libs/windows-x86_64/
+     libapp-lib.dll  libcrypto-3-x64.dll  libsimplex.dll  vlc/
+   apps/multiplatform/build/links/windows-x64   (junction to the directory above)
+   ```
+
+   `build/links/<os>-<arch>` is what Compose bundles as the application resources, and
+   `windowsLoadRequiredLibs` in `desktop/src/jvmMain/.../Main.kt` loads the DLLs from there.
+
+2. **Build.**
+
+   ```
+   cd apps/multiplatform
+   ./gradlew :desktop:packageDistributionForCurrentOS
+   ```
+
+   Output: `apps/multiplatform/release/main/msi/Macet Secure Chat-<version>.msi`.
+
+   `desktop/build.gradle.kts` skips the CMake build of the JNI shim when `libapp-lib` for the host
+   platform is already present, which is why a C toolchain is not needed. Pass `-PbuildNativeLibs`
+   to build it from source anyway.
