@@ -1,5 +1,7 @@
 @file:Suppress("UnstableApiUsage")
 
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.compose")
@@ -11,9 +13,9 @@ plugins {
 // Release signing. Credentials live in apps/multiplatform/keystore.properties, which is
 // git-ignored - see README of this fork. Without that file the release build is left unsigned
 // so that the project still configures on a machine that has no signing key.
-val keystoreProperties = java.util.Properties().apply {
+val keystoreProperties = Properties().apply {
     val f = rootProject.file("keystore.properties")
-    if (f.exists()) f.inputStream().use { load(it) }
+    if (f.exists()) f.inputStream().use { s -> load(s) }
 }
 
 android {
