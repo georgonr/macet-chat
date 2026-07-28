@@ -227,7 +227,6 @@ fun YourServersViewLayout(
         }
       )
 
-      HowToButton()
     }
     SectionBottomSpacer()
   }
@@ -329,17 +328,6 @@ fun ProtocolServerViewLink(serverProtocol: ServerProtocol, srv: UserServer, dupl
   }
 }
 
-@Composable
-private fun HowToButton() {
-  val uriHandler = LocalUriHandler.current
-  SettingsActionItem(
-    painterResource(MR.images.ic_open_in_new),
-    stringResource(MR.strings.how_to_use_your_servers),
-    { uriHandler.openExternalLink("https://simplex.chat/docs/server.html") },
-    textColor = MaterialTheme.colors.primary,
-    iconColor = MaterialTheme.colors.primary
-  )
-}
 
 @Composable
 fun InvalidServer() {

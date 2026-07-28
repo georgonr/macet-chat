@@ -4413,10 +4413,8 @@ sealed class FileError {
     is Other -> generalGetString(MR.strings.ci_status_other_error).format(fileError)
   }
 
-  val moreInfoButton: Pair<String, String>? get() = when(this) {
-    is Blocked -> generalGetString(MR.strings.how_it_works) to contentModerationPostLink
-    else -> null
-  }
+  // no "how it works" button - it linked to a simplex.chat blog post
+  val moreInfoButton: Pair<String, String>? get() = null
 }
 
 @Suppress("SERIALIZER_TYPE_INCOMPATIBLE")
@@ -4871,7 +4869,7 @@ enum class FormatColor(val color: String) {
   val uiColor: Color @Composable get() = when (this) {
     red -> Color.Red
     green -> SimplexGreen
-    blue -> SimplexBlue
+    blue -> MacetAccent
     yellow -> WarningYellow
     cyan -> Color.Cyan
     magenta -> Color.Magenta

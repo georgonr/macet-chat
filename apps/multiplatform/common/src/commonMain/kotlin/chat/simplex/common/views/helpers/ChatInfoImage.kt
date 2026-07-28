@@ -222,12 +222,10 @@ fun showBadgeInfoAlert(name: String, badge: LocalBadge, uriHandler: UriHandler) 
         text = generalGetString(MR.strings.badge_unknown_key_desc)
       )
     badge.badge.badgeType is BadgeType.Investor ->
-      AlertManager.shared.showAlertDialog(
+      // no "learn more" button - it linked to the simplex.chat crowdfunding page
+      AlertManager.shared.showAlertMsg(
         title = title,
-        text = String.format(generalGetString(MR.strings.badge_invested), name),
-        confirmText = generalGetString(MR.strings.ok),
-        dismissText = generalGetString(MR.strings.learn_more),
-        onDismiss = { uriHandler.openUriCatching("https://simplex.chat/crowdfunding") }
+        text = String.format(generalGetString(MR.strings.badge_invested), name)
       )
     else -> {
       // Supporter, Legend and unknown types use the supporter wording

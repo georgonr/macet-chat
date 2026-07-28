@@ -240,18 +240,9 @@ fun showFileErrorAlert(err: FileError, temporary: Boolean = false) {
   }
 }
 
-val contentModerationPostLink = "https://simplex.chat/blog/20250114-simplex-network-large-groups-privacy-preserving-content-moderation.html#preventing-server-abuse-without-compromising-e2e-encryption"
-
 fun showContentBlockedAlert(title: String, message: String) {
   AlertManager.shared.showAlertDialogButtonsColumn(title, text = message, buttons = {
-    val uriHandler = LocalUriHandler.current
     Column {
-      SectionItemView({
-        AlertManager.shared.hideAlert()
-        uriHandler.openUriCatching(contentModerationPostLink)
-      }) {
-        Text(generalGetString(MR.strings.how_it_works), Modifier.fillMaxWidth(), textAlign = TextAlign.Center, color = MaterialTheme.colors.primary)
-      }
       SectionItemView({
         AlertManager.shared.hideAlert()
       }) {

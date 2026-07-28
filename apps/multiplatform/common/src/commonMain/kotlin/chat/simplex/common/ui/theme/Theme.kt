@@ -633,8 +633,8 @@ val DEFAULT_END_MODAL_WIDTH = 388.dp
 val DEFAULT_MAX_IMAGE_WIDTH = 500.dp
 
 val DarkColorPalette = darkColors(
-  primary = SimplexBlue,  // If this value changes also need to update #0088ff in string resource files
-  primaryVariant = SimplexBlue,
+  primary = MacetAccent,  // If this value changes also need to update #0088ff in string resource files
+  primaryVariant = MacetAccent,
   secondary = HighOrLowlight,
   secondaryVariant = DarkGray,
 //  background = Color.Black,
@@ -646,7 +646,7 @@ val DarkColorPalette = darkColors(
 //  onError: Color = Color.Black,
 )
 val DarkColorPaletteApp = AppColors(
-  title = SimplexBlue,
+  title = MacetAccent,
   primaryVariant2 = Color(0xFF18262E),
   sentMessage = Color(0xFF18262E),
   sentQuote = Color(0xFF1D3847),
@@ -655,8 +655,8 @@ val DarkColorPaletteApp = AppColors(
 )
 
 val LightColorPalette = lightColors(
-  primary = SimplexBlue,  // If this value changes also need to update #0088ff in string resource files
-  primaryVariant = SimplexBlue,
+  primary = MacetAccent,  // If this value changes also need to update #0088ff in string resource files
+  primaryVariant = MacetAccent,
   secondary = HighOrLowlight,
   secondaryVariant = LightGray,
   error = Color.Red,
@@ -668,7 +668,7 @@ val LightColorPalette = lightColors(
 //  onSurface = Color.Black,
 )
 val LightColorPaletteApp = AppColors(
-  title = SimplexBlue,
+  title = MacetAccent,
   primaryVariant2 = Color(0xFFE9F7FF),
   sentMessage = Color(0xFFE9F7FF),
   sentQuote = Color(0xFFD6F0FF),

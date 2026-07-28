@@ -58,11 +58,11 @@ fun ReadableText(stringResId: StringResource, textAlign: TextAlign = TextAlign.S
 fun ReadableTextWithLink(stringResId: StringResource, link: String, textAlign: TextAlign = TextAlign.Start, padding: PaddingValues = PaddingValues(bottom = 12.dp), simplexLink: Boolean = false) {
   val annotated = annotatedStringResource(stringResId)
   val primary = MaterialTheme.colors.primary
-  // This replaces links in text highlighted with specific color, e.g. SimplexBlue
+  // This replaces links in text highlighted with specific color, e.g. MacetAccent
   val newStyles = remember(stringResId) {
     val newStyles = ArrayList<AnnotatedString.Range<SpanStyle>>()
     annotated.spanStyles.forEach {
-      if (it.item.color == SimplexBlue) {
+      if (it.item.color == MacetAccent) {
         newStyles.add(it.copy(item = it.item.copy(primary)))
       } else {
         newStyles.add(it)

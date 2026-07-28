@@ -220,7 +220,8 @@ class AppPreferences {
   /** after importing new database, this flag will be set and unset only after importing app settings in [initChatController] */
   val shouldImportAppSettings = mkBoolPreference(SHARED_PREFS_SHOULD_IMPORT_APP_SETTINGS, false)
 
-  val currentTheme = mkStrPreference(SHARED_PREFS_CURRENT_THEME, DefaultTheme.SYSTEM_THEME_NAME)
+  // Macet ships with the dark theme as the default
+  val currentTheme = mkStrPreference(SHARED_PREFS_CURRENT_THEME, DefaultTheme.DARK.themeName)
   val systemDarkTheme = mkStrPreference(SHARED_PREFS_SYSTEM_DARK_THEME, DefaultTheme.DARK.themeName)
   val currentThemeIds = mkMapPreference(SHARED_PREFS_CURRENT_THEME_IDs, mapOf(), encode = {
     json.encodeToString(MapSerializer(String.serializer(), String.serializer()), it)
@@ -4332,7 +4333,7 @@ val operatorsInfo: Map<OperatorTag, ServerOperatorInfo> = mapOf(
       "SimpleX Chat is the first communication network that has no user profile IDs of any kind, not even random numbers or keys that identify the users.",
       "SimpleX Chat Ltd develops the communication software for SimpleX network."
     ),
-    website = "https://simplex.chat",
+    website = "https://cht.macet.eu",
     logo = MR.images.decentralized,
     largeLogo = MR.images.logo,
     logoDarkMode = MR.images.decentralized_light,
@@ -4430,7 +4431,7 @@ data class ServerOperator(
   companion object {
     val dummyOperatorInfo = ServerOperatorInfo(
       description = listOf("Default"),
-      website = "https://simplex.chat",
+      website = "https://cht.macet.eu",
       logo = MR.images.decentralized,
       largeLogo = MR.images.logo,
       logoDarkMode = MR.images.decentralized_light,
@@ -8414,12 +8415,6 @@ fun showClientNoticeAlert(server: String, preset: Boolean, expiresAt: Instant?) 
         }) {
           Text(generalGetString(MR.strings.operator_conditions_of_use), Modifier.fillMaxWidth(), textAlign = TextAlign.Center, color = MaterialTheme.colors.primary)
         }
-      }
-      SectionItemView({
-        AlertManager.shared.hideAlert()
-        uriHandler.openUriCatching(contentModerationPostLink)
-      }) {
-        Text(generalGetString(MR.strings.how_it_works), Modifier.fillMaxWidth(), textAlign = TextAlign.Center, color = MaterialTheme.colors.primary)
       }
     }
   }

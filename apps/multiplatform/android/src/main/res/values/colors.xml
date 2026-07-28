@@ -3,4 +3,6 @@
   <color name="black">#FF000000</color>
   <color name="white">#FFFFFFFF</color>
   <color name="window_background_dark">#121212</color>
+  <color name="macet_background">#0F172A</color>
+  <color name="macet_accent">#38BDF8</color>
 </resources>

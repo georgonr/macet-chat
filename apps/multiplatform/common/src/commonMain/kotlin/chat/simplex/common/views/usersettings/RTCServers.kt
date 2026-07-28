@@ -146,7 +146,6 @@ fun RTCServersLayout(
               }
             }
             Column(horizontalAlignment = Alignment.End) {
-              howToButton()
             }
           }
         } else {
@@ -183,7 +182,6 @@ fun RTCServersLayout(
               )
             }
             Column(horizontalAlignment = Alignment.End) {
-              howToButton()
             }
           }
         }
@@ -193,17 +191,3 @@ fun RTCServersLayout(
   }
 }
 
-@Composable
-private fun howToButton() {
-  val uriHandler = LocalUriHandler.current
-  Row(
-    verticalAlignment = Alignment.CenterVertically,
-    modifier = Modifier.clickable { uriHandler.openExternalLink("https://simplex.chat/docs/webrtc.html#configure-mobile-apps") }
-  ) {
-    Text(stringResource(MR.strings.how_to), color = MaterialTheme.colors.primary)
-    Icon(
-      painterResource(MR.images.ic_open_in_new), stringResource(MR.strings.how_to), tint = MaterialTheme.colors.primary,
-      modifier = Modifier.padding(horizontal = 5.dp)
-    )
-  }
-}
