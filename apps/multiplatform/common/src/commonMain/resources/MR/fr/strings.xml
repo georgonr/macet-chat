@@ -2301,7 +2301,7 @@
     <string name="you_will_stop_receiving_messages_from_this_chat_chat_history_will_be_preserved">Vous ne recevrez plus de messages de cette discussion. L\'historique sera préservé.</string>
     <string name="member_will_be_removed_from_chat_cannot_be_undone">Le membre sera retiré de la discussion - cela ne peut pas être annulé !</string>
     <string name="chat_main_profile_sent">Votre profil de discussion sera envoyé aux autres membres</string>
-    <string name="your_servers">Vos serveurs</string>
+    <string name="your_servers">Macet</string>
     <string name="use_servers_of_operator_x">Utiliser %s</string>
     <string name="operator_use_operator_toggle_description">Utiliser les serveurs</string>
     <string name="operator_use_for_messages_receiving">Pour recevoir</string>

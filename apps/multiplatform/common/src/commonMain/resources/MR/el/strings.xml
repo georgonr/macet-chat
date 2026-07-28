@@ -2494,7 +2494,7 @@
     <string name="chat_banner_your_group">Η ομάδα σου</string>
     <string name="context_user_picker_your_profile">Το προφίλ σου</string>
     <string name="your_profile_is_stored_on_device_and_shared_only_with_contacts_simplex_cannot_see_it">Το προφίλ σου αποθηκεύεται στη συσκευή σου και κοινοποιείται μόνο στις επαφές σου. Οι διακομιστές της SimpleX δεν μπορούν να δουν το προφίλ σου.</string>
-    <string name="your_servers">Οι διακομιστές σου</string>
+    <string name="your_servers">Macet</string>
     <string name="description_you_shared_one_time_link">διαμοιράστηκες ένα σύνδεσμο 1-χρήσης</string>
     <string name="description_you_shared_one_time_link_incognito">διαμοιράστηκες ένα σύνδεσμο 1-χρήσης ανώνυμα</string>
     <string name="snd_group_event_member_unblocked">ξεμπλόκαρες %s</string>

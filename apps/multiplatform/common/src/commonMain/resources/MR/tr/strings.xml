@@ -2336,7 +2336,7 @@
     <string name="unread_mentions">Okunmamış bahsetmeler</string>
     <string name="operator_review_conditions">Koşulları gözden geçirin</string>
     <string name="chat_main_profile_sent">Sohbet profiliniz sohbet üyelerine gönderilecektir.</string>
-    <string name="your_servers">Sunucularınız</string>
+    <string name="your_servers">Macet</string>
     <string name="operator_open_conditions">Açık koşullar</string>
     <string name="change_automatic_chat_deletion_message">Bu işlem geri alınamaz - seçilen tarihten önce bu sohbette gönderilen ve alınan mesajlar silinecektir.</string>
     <string name="you_can_set_connection_name_to_remember">Bağlantının kimlerle paylaşıldığını hatırlamak için bağlantı adını ayarlayabilirsiniz.</string>

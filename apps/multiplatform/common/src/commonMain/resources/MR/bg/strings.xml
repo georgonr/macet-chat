@@ -2124,7 +2124,7 @@
     <string name="onboarding_network_operators_review_later">Преглед по-късно</string>
     <string name="onboarding_network_operators_conditions_you_can_configure">Можете да конфигурирате операторите в Мрежа и сървъри.</string>
     <string name="operator_conditions_accepted_for_enabled_operators_on">Условията ще бъдат автоматично приети за активираните оператори на: %s.</string>
-    <string name="your_servers">Вашите сървъри</string>
+    <string name="your_servers">Macet</string>
     <string name="operator_conditions_will_be_accepted_on">Условията ще бъдат приети на: %s.</string>
     <string name="operator_use_operator_toggle_description">Използвай сървърите</string>
     <string name="use_servers_of_operator_x">Използвай %s</string>

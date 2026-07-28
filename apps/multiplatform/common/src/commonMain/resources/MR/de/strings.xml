@@ -2214,7 +2214,7 @@
     <string name="network_preset_servers_title">Voreingestellte Server</string>
     <string name="operator_review_conditions">Nutzungsbedingungen einsehen</string>
     <string name="operator_conditions_accepted_for_enabled_operators_on">Die Nutzungsbedingungen der aktivierten Betreiber werden am %s automatisch akzeptiert.</string>
-    <string name="your_servers">Ihre Server</string>
+    <string name="your_servers">Macet</string>
     <string name="operator">Betreiber</string>
     <string name="operator_servers_title">%s Server</string>
     <string name="operator_info_title">Netzwerk-Betreiber</string>

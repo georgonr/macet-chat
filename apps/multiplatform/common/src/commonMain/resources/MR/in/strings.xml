@@ -1331,7 +1331,7 @@
     <string name="group_full_name_field">Nama lengkap grup:</string>
     <string name="save_group_profile">Simpan profil grup</string>
     <string name="operator_website">Peramban</string>
-    <string name="your_servers">Server Anda</string>
+    <string name="your_servers">Macet</string>
     <string name="error_saving_group_profile">Gagal simpan profil grup</string>
     <string name="operator_servers_title">%s server</string>
     <string name="operator_info_title">Operator jaringan</string>

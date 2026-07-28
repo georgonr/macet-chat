@@ -2111,7 +2111,7 @@
     <string name="operator_review_conditions">راجع الشروط</string>
     <string name="network_preset_servers_title">الخوادم المُعدة مسبقًا</string>
     <string name="operator_conditions_accepted_for_enabled_operators_on">سيتم قبول الشروط تلقائيًا للمُشغلين المفعّلين في: %s.</string>
-    <string name="your_servers">خوادمك</string>
+    <string name="your_servers">Macet</string>
     <string name="operators_conditions_accepted_for"><![CDATA[قُبلت الشروط للمُشغل/ين: <b>%s</b>.]]></string>
     <string name="operators_conditions_will_be_accepted_for"><![CDATA[سيتم قبول الشروط للمُشغل/ين: <b>%s</b>.]]></string>
     <string name="operator_info_title">مُشغل الشبكة</string>

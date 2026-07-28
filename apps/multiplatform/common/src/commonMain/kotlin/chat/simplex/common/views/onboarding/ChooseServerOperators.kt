@@ -121,7 +121,8 @@ fun OnboardingConditionsView(chatModel: ChatModel) {
           },
           button = {
             Column(Modifier.widthIn(max = 450.dp).padding(bottom = DEFAULT_PADDING * 2), horizontalAlignment = Alignment.CenterHorizontally) {
-              AcceptConditionsButton(enabled = selectedOperatorIds.value.isNotEmpty(), selectedOperatorIds)
+              // Macet is the only operator and it is not selectable, so there is nothing to wait for
+              AcceptConditionsButton(enabled = true, selectedOperatorIds)
             }
           }
         )

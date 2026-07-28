@@ -2202,7 +2202,7 @@
     <string name="address_or_1_time_link">Адрес или одноразовая ссылка?</string>
     <string name="connection_security">Безопасность соединения</string>
     <string name="onboarding_choose_server_operators">Операторы серверов</string>
-    <string name="your_servers">Ваши серверы</string>
+    <string name="your_servers">Macet</string>
     <string name="view_conditions">Посмотреть условия</string>
     <string name="operator_review_conditions">Посмотреть условия</string>
     <string name="operators_conditions_accepted_for"><![CDATA[Условия приняты для оператора(ов): <b>%s</b>.]]></string>

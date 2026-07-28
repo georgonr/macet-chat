@@ -2148,7 +2148,7 @@
     <string name="onboarding_network_operators_conditions_you_can_configure">U kunt operators configureren in Netwerk- en serverinstellingen.</string>
     <string name="onboarding_network_operators_continue">Doorgaan</string>
     <string name="operator_review_conditions">Voorwaarden bekijken</string>
-    <string name="your_servers">Uw servers</string>
+    <string name="your_servers">Macet</string>
     <string name="operator_conditions_accepted_for_some"><![CDATA[Voorwaarden worden al geaccepteerd voor de volgende operator(s): <b>%s</b>.]]></string>
     <string name="operators_conditions_will_be_accepted_for"><![CDATA[Voorwaarden worden geaccepteerd voor de operator(s): <b>%s</b>.]]></string>
     <string name="operator_conditions_will_be_applied"><![CDATA[Deze voorwaarden zijn ook van toepassing op: <b>%s</b>.]]></string>

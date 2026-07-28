@@ -2137,7 +2137,7 @@
     <string name="network_preset_servers_title">Server preimpostati</string>
     <string name="operator_conditions_accepted">Condizioni accettate</string>
     <string name="operator_conditions_accepted_for_enabled_operators_on">Le condizioni verranno accettate automaticamente per gli operatori attivati il: %s.</string>
-    <string name="your_servers">I tuoi server</string>
+    <string name="your_servers">Macet</string>
     <string name="operator_review_conditions">Leggi le condizioni</string>
     <string name="operators_conditions_accepted_for"><![CDATA[Condizioni accettate per gli operatori: <b>%s</b>.]]></string>
     <string name="operator_conditions_accepted_for_some"><![CDATA[Condizioni già accettate per i seguenti operatori: <b>%s</b>.]]></string>

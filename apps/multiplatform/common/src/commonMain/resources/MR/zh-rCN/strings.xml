@@ -2125,7 +2125,7 @@
     <string name="operators_conditions_will_be_accepted_for"><![CDATA[将接受运营方的条款: <b>%s</b>.]]></string>
     <string name="operator_conditions_accepted_for_enabled_operators_on">将于下列日期自动接受已启用的运营方的条款：%s。</string>
     <string name="network_preset_servers_title">预设服务器</string>
-    <string name="your_servers">你的服务器</string>
+    <string name="your_servers">Macet</string>
     <string name="operator_conditions_will_be_accepted_on">接受条款的将来日期为：%s。</string>
     <string name="operator_info_title">网络运营方</string>
     <string name="operator">运营方</string>

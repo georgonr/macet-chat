@@ -1832,7 +1832,7 @@
     <string name="privacy_media_blur_radius_soft">弱</string>
     <string name="recipient_colon_delivery_status">%s：%s</string>
     <string name="info_row_chat">聊天</string>
-    <string name="your_servers">你的伺服器</string>
+    <string name="your_servers">Macet</string>
     <string name="appearance_zoom">縮放</string>
     <string name="appearance_bars_blur_radius">模糊</string>
     <string name="forward_files_not_accepted_desc">%1$d 個檔案未被下載。</string>

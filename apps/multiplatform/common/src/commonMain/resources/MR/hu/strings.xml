@@ -2118,7 +2118,7 @@
     <string name="operator_review_conditions">Feltételek felülvizsgálata</string>
     <string name="operator_conditions_accepted">Elfogadott feltételek</string>
     <string name="operator_conditions_accepted_for_enabled_operators_on">A feltételek automatikusan el lesznek fogadva az engedélyezett üzemeltetők számára a következő időpontban: %s.</string>
-    <string name="your_servers">Saját kiszolgálók</string>
+    <string name="your_servers">Macet</string>
     <string name="operators_conditions_accepted_for"><![CDATA[A következő üzemeltető(k) számára elfogadott feltételek: <b>%s</b>.]]></string>
     <string name="operators_conditions_will_be_accepted_for"><![CDATA[A feltételek el lesznek fogadva a következő üzemeltető(k) számára: <b>%s</b>.]]></string>
     <string name="operator_servers_title">%s kiszolgáló</string>

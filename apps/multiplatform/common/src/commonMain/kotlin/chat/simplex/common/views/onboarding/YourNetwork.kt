@@ -97,11 +97,7 @@ fun YourNetworkView(chatModel: ChatModel) {
                 horizontalAlignment = Alignment.Start,
                 verticalArrangement = Arrangement.spacedBy(4.dp)
               ) {
-                ConfigureRoutersButton(serverOperators, selectedOperatorIds) {
-                  ModalManager.fullscreen.showCustomModal { close ->
-                    ChooseServerOperators(serverOperators, selectedOperatorIds, close)
-                  }
-                }
+                // no operator picker - Macet is the only operator of this build
                 ConfigureNotificationsButton(notificationMode) {
                   ModalManager.fullscreen.showModalCloseable { close ->
                     SetNotificationsMode(notificationMode, close)
@@ -146,11 +142,7 @@ private fun YourNetworkDesktop(
           }
           Text(stringResource(MR.strings.onboarding_network_routers_cannot_know), style = MaterialTheme.typography.h3, fontWeight = FontWeight.Medium, color = MaterialTheme.colors.secondary, lineHeight = 25.sp, textAlign = TextAlign.Center)
           Spacer(Modifier.height(DEFAULT_PADDING))
-          ConfigureRoutersButton(serverOperators, selectedOperatorIds) {
-            ModalManager.fullscreen.showCustomModal(forceAnimated = true) { close ->
-              ChooseServerOperators(serverOperators, selectedOperatorIds, close)
-            }
-          }
+          // no operator picker - Macet is the only operator of this build
         }
         Spacer(Modifier.fillMaxHeight().weight(1f))
         Column(Modifier.widthIn(max = 1000.dp).align(Alignment.CenterHorizontally), horizontalAlignment = Alignment.CenterHorizontally) {
@@ -164,34 +156,6 @@ private fun YourNetworkDesktop(
           )
           TextButtonBelowOnboardingButton("", null)
         }
-      }
-    }
-  }
-}
-
-@Composable
-private fun ConfigureRoutersButton(serverOperators: State<List<ServerOperator>>, selectedOperatorIds: State<Set<Long>>, onClick: () -> Unit) {
-  Box(
-    modifier = Modifier
-      .clip(CircleShape)
-      .clickable { onClick() }
-  ) {
-    Row(Modifier.padding(8.dp), horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically) {
-      Text(
-        stringResource(MR.strings.onboarding_configure_routers),
-        style = MaterialTheme.typography.button,
-        fontWeight = FontWeight.Medium,
-        color = MaterialTheme.colors.primary
-      )
-      serverOperators.value.forEach { op ->
-        Image(
-          painterResource(op.logo),
-          contentDescription = null,
-          modifier = Modifier.size(22.dp),
-          colorFilter = if (selectedOperatorIds.value.contains(op.operatorId)) null else ColorFilter.colorMatrix(ColorMatrix().apply {
-            setToSaturation(0f)
-          })
-        )
       }
     }
   }

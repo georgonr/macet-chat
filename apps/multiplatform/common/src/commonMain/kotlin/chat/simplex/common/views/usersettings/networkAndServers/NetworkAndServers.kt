@@ -210,9 +210,14 @@ fun ModalData.NetworkAndServersView(closeNetworkAndServers: () -> Unit) {
     AppBarTitle(stringResource(MR.strings.network_and_servers))
     // TODO: Review this and socks.
     if (!chatModel.desktopNoUserNoRemote) {
-      SectionView(generalGetString(MR.strings.network_preset_servers_title).uppercase()) {
-        userServers.value.forEachIndexed { index, srv ->
-          srv.operator?.let { ServerOperatorRow(index, it, currUserServers, userServers, serverErrors, serverWarnings, currentRemoteHost?.remoteHostId) }
+      // the preset operators of the upstream project are disabled in this build, so they are not
+      // offered here either - Macet is the only operator, see MacetServers.kt
+      val presetOperators = userServers.value.withIndex().filter { it.value.operator?.enabled == true }
+      if (presetOperators.isNotEmpty()) {
+        SectionView(generalGetString(MR.strings.network_preset_servers_title).uppercase()) {
+          presetOperators.forEach { (index, srv) ->
+            srv.operator?.let { ServerOperatorRow(index, it, currUserServers, userServers, serverErrors, serverWarnings, currentRemoteHost?.remoteHostId) }
+          }
         }
       }
       if (conditionsAction != null && anyOperatorEnabled.value) {

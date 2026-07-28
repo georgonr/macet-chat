@@ -255,7 +255,8 @@ fun parseRTCIceServers(servers: List<String>): List<RTCIceServer>? {
 }
 
 fun getIceServers(): List<RTCIceServer>? {
-  val value = ChatController.appPrefs.webrtcIceServers.get() ?: return null
+  // without user servers the Macet ICE server is used - it is also the default in call.js
+  val value = ChatController.appPrefs.webrtcIceServers.get() ?: MacetServers.iceServer
   val servers: List<String> = value.split("\n")
   return parseRTCIceServers(servers)
 }

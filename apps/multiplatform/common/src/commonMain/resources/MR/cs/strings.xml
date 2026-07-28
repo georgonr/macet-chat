@@ -2271,7 +2271,7 @@
     <string name="subscription_results_ignored">Odběr ignorován</string>
     <string name="srv_error_version">Verze serveru není kompatibilní s nastavením sítě.</string>
     <string name="address_creation_instruction">Pro pozdější vytvoření adresy, klepněte v menu na Vytvořit SimpleX adresu.</string>
-    <string name="your_servers">Vaše servery</string>
+    <string name="your_servers">Macet</string>
     <string name="view_updated_conditions">Zobrazit aktualizované podmínky</string>
     <string name="group_reports_active_one">1 report</string>
     <string name="group_preview_rejected">zamítnuto</string>

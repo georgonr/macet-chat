@@ -2487,7 +2487,7 @@
     <string name="network_proxy_auth_mode_username_password">اعتبارنامه‌های شما ممکن است به‌صورت رمزنگاری‌نشده ارسال شوند.</string>
     <string name="chat_banner_your_group">گروه شما</string>
     <string name="context_user_picker_your_profile">پروفایل شما</string>
-    <string name="your_servers">سرورهای شما</string>
+    <string name="your_servers">Macet</string>
     <string name="you_will_stop_receiving_messages_from_this_chat_chat_history_will_be_preserved">شما دیگر پیام‌هایی از این چت دریافت نخواهید کرد. تاریخچه چت حفظ خواهد شد.</string>
     <string name="appearance_zoom">بزرگنمایی</string>
     <string name="connect_use_incognito_profile">استفاده از پروفایل ناشناس</string>

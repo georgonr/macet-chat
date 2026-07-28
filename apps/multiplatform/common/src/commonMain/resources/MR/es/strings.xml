@@ -2169,7 +2169,7 @@
     <string name="simplex_address_and_1_time_links_are_safe_to_share">Compartir enlaces de un solo uso y direcciones SimpleX es seguro a través de cualquier medio.</string>
     <string name="onboarding_network_operators_update">Actualizar</string>
     <string name="operator_website">Sitio web</string>
-    <string name="your_servers">Tus servidores</string>
+    <string name="your_servers">Macet</string>
     <string name="use_servers_of_operator_x">Usar %s</string>
     <string name="operator_use_operator_toggle_description">Usar servidores</string>
     <string name="operator_use_for_messages">Uso para mensajes</string>

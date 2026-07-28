@@ -2281,7 +2281,7 @@
     <string name="profile_will_be_sent_to_contact_sending_link">Hồ sơ của bạn sẽ được gửi tới liên hệ mà bạn đã nhận từ người đó đường dẫn này.</string>
     <string name="you_will_join_group">Bạn sẽ kết nối với tất cả các thành viên nhóm.</string>
     <string name="non_content_uri_alert_text">Bạn đã chia sẻ một đường dẫn tệp không hợp lệ. Báo cáo vấn đề tới các nhà phát triển ứng dụng.</string>
-    <string name="your_servers">Các máy chủ của bạn</string>
+    <string name="your_servers">Macet</string>
     <string name="you_will_still_receive_calls_and_ntfs">Bạn vẫn sẽ nhận các cuộc gọi và thông báo từ các hồ sơ đã bị tắt thông báo khi chúng hoạt động.</string>
     <string name="connect_via_member_address_alert_desc">Yêu cầu kết nối sẽ được gửi tới thành viên nhóm này.</string>
     <string name="you_will_stop_receiving_messages_from_this_chat_chat_history_will_be_preserved">Bạn sẽ dừng nhận tin nhắn từ cuộc hội thoại này. Lịch sử trò chuyện sẽ được giữ lại.</string>

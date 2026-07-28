@@ -2216,7 +2216,7 @@
     <string name="sync_connection_question">Reparar conexão?</string>
     <string name="error_creating_report">Erro ao criar denúncia</string>
     <string name="info_row_chat">Chat</string>
-    <string name="your_servers">Seus servidores</string>
+    <string name="your_servers">Macet</string>
     <string name="group_member_status_pending_approval">aprovação pendente</string>
     <string name="group_member_status_pending_approval_short">pendente</string>
     <string name="group_members_can_send_reports">Os membros podem denunciar mensagens aos moderadores.</string>

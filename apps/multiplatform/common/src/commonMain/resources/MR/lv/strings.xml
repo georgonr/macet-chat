@@ -1987,7 +1987,7 @@
     <string name="operator_review_conditions">Operatora pārskata nosacījumi</string>
     <string name="operator_conditions_accepted">Operatora nosacījumi pieņemti</string>
     <string name="operator_conditions_accepted_for_enabled_operators_on">Operatora nosacījumi pieņemti aktivizētiem operatoriem</string>
-    <string name="your_servers">Jūsu serveri</string>
+    <string name="your_servers">Macet</string>
     <string name="operators_conditions_accepted_for"><![CDATA[Operatoru nosacījumi pieņemti]]></string>
     <string name="operators_conditions_will_be_accepted_for"><![CDATA[Operatoru nosacījumi tiks pieņemti]]></string>
     <string name="operator">Operators</string>

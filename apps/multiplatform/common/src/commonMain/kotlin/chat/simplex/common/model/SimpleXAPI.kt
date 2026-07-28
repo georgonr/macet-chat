@@ -564,6 +564,8 @@ object ChatController {
     Log.d(TAG, "user: $user")
     try {
       apiSetNetworkConfig(getNetCfg())
+      // Macet is the only operator of this build - see MacetServers.kt
+      applyMacetServersToAllUsers(null)
       val chatRunning = apiCheckChatRunning()
       val users = listUsers(null)
       chatModel.users.clear()

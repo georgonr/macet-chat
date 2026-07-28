@@ -2027,7 +2027,7 @@
     <string name="conn_stats_section_title_servers">SERVIDORS</string>
     <string name="group_welcome_title">Missatge de benvinguda</string>
     <string name="welcome_message_is_too_long">El missatge de benvinguda és massa llarg</string>
-    <string name="your_servers">Els teus servidors</string>
+    <string name="your_servers">Macet</string>
     <string name="network_preset_servers_title">Servidors preestablerts</string>
     <string name="operator_review_conditions">Revisar condicions</string>
     <string name="operator_use_for_messages_receiving">Per a rebre</string>
