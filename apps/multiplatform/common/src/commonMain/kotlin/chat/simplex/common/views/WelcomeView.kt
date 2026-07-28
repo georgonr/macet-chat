@@ -373,12 +373,13 @@ fun createProfileInProfiles(chatModel: ChatModel, displayName: String, shortDesc
       rhId, Profile(displayName.trim(), "", shortDescr.trim().ifEmpty { null }, image)
     ) ?: return@withBGApi
     chatModel.currentUser.value = user
-    // a new profile is seeded with the preset servers of the core - see MacetServers.kt
-    chatModel.controller.applyMacetServers(rhId, user.userId)
     if (chatModel.users.isEmpty()) {
+      // startChat applies the Macet servers itself, once the chat is started
       chatModel.controller.startChat(user)
       chatModel.controller.appPrefs.onboardingStage.set(OnboardingStage.Step4_NetworkCommitments)
     } else {
+      // a new profile is seeded with the preset servers of the core - see MacetServers.kt
+      chatModel.controller.applyMacetServers(rhId, user.userId)
       val users = chatModel.controller.listUsers(rhId)
       chatModel.users.clear()
       chatModel.users.addAll(users)

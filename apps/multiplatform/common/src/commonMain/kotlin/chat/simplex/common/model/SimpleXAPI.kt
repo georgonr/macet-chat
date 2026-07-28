@@ -558,8 +558,6 @@ object ChatController {
     Log.d(TAG, "user: $user")
     try {
       apiSetNetworkConfig(getNetCfg())
-      // Macet is the only operator of this build - see MacetServers.kt
-      applyMacetServersToAllUsers(null)
       val chatRunning = apiCheckChatRunning()
       val users = listUsers(null)
       chatModel.users.clear()
@@ -584,6 +582,10 @@ object ChatController {
         Log.d(TAG, "startChat: running")
       }
       apiStartChat()
+      // Macet is the only operator of this build - see MacetServers.kt. The core answers the
+      // server commands with chatNotStarted until the chat is started, so this has to come after
+      // apiStartChat, not before it.
+      applyMacetServersToAllUsers(null)
       appPrefs.chatStopped.set(false)
     } catch (e: Throwable) {
       Log.e(TAG, "failed starting chat $e")
