@@ -12,7 +12,8 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "chat.simplex.app"
+        applicationId = "eu.macet.chat"
+        // namespace stays as the original Java/Kotlin package of the sources
         namespace = "chat.simplex.app"
         minSdk = 26
         targetSdk = 35
@@ -31,7 +32,7 @@ android {
             }
         }
         manifestPlaceholders["app_name"] = "@string/app_name"
-        manifestPlaceholders["provider_authorities"] = "chat.simplex.app.provider"
+        manifestPlaceholders["provider_authorities"] = "eu.macet.chat.provider"
         manifestPlaceholders["extract_native_libs"] = rootProject.extra["compression.level"] as Int != 0
     }
 
