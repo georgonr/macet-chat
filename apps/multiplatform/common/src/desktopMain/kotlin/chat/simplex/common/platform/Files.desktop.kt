@@ -10,7 +10,7 @@ import java.io.*
 import java.net.URI
 
 actual val dataDir: File = File(desktopPlatform.dataPath)
-actual val tmpDir: File = File(System.getProperty("java.io.tmpdir") + File.separator + "simplex").also { it.deleteOnExit() }
+actual val tmpDir: File = File(System.getProperty("java.io.tmpdir") + File.separator + "macet").also { it.deleteOnExit() }
 actual val filesDir: File = File(dataDir.absolutePath + File.separator + "simplex_v1_files")
 actual val appFilesDir: File = filesDir
 actual val wallpapersDir: File = File(dataDir.absolutePath + File.separator + "simplex_v1_assets" + File.separator + "wallpapers").also { it.mkdirs() }

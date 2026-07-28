@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Macet Secure Chat
+Comment=Private and secure messenger - no user IDs (not even random numbers)
+Exec=/opt/macet/bin/macet
+Icon=/opt/macet/lib/macet
+Categories=Network;Chat;

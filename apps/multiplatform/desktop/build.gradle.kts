@@ -40,7 +40,7 @@ compose {
       }
       mainClass = "chat.simplex.desktop.MainKt"
       nativeDistributions {
-        copyright = "(c) 2020-2026 SimpleX Chat"
+        copyright = "(c) 2020-2026 SimpleX Chat, (c) 2026 Macet"
         // For debugging via VisualVM
         if (debugJava) {
           modules("jdk.zipfs", "jdk.unsupported", "jdk.management.agent")
@@ -56,27 +56,29 @@ compose {
           //, TargetFormat.AppImage // Gradle doesn't sync on Mac with it
         )
         linux {
-          iconFile.set(project.file("src/jvmMain/resources/distribute/simplex.png"))
+          iconFile.set(project.file("src/jvmMain/resources/distribute/macet.png"))
           appCategory = "Messenger"
         }
         windows {
-          packageName = "SimpleX"
-          iconFile.set(project.file("src/jvmMain/resources/distribute/simplex.ico"))
+          packageName = "Macet Secure Chat"
+          iconFile.set(project.file("src/jvmMain/resources/distribute/macet.ico"))
           console = false
           perUserInstall = false
           dirChooser = true
           shortcut = true
-          upgradeUuid = "CC9EFBC8-AFFF-40D8-BB69-FCD7CE99EFB9"
+          // Macet is a separate product, so it gets its own upgrade code - sharing upstream's
+          // would make the two installers replace each other.
+          upgradeUuid = "FEBCD35A-8C48-403A-813A-FBB3939274F0"
         }
         macOS {
-          packageName = "SimpleX"
-          iconFile.set(project.file("src/jvmMain/resources/distribute/simplex.icns"))
+          packageName = "Macet Secure Chat"
+          iconFile.set(project.file("src/jvmMain/resources/distribute/macet.icns"))
           appCategory = "public.app-category.social-networking"
-          bundleID = "chat.simplex.app"
+          bundleID = "eu.macet.chat"
           infoPlist {
             extraKeysRawXml = """
               <key>NSMicrophoneUsageDescription</key>
-              <string>SimpleX needs microphone access to record voice messages</string>
+              <string>Macet Secure Chat needs microphone access to record voice messages</string>
             """
           }
           val identity = rootProject.extra["desktop.mac.signing.identity"] as String?
@@ -99,9 +101,9 @@ compose {
         }
         val os = System.getProperty("os.name", "generic").toDefaultLowerCase()
         if (os.contains("mac") || os.contains("win")) {
-          packageName = "SimpleX"
+          packageName = "Macet Secure Chat"
         } else {
-          packageName = "simplex"
+          packageName = "macet"
         }
         // Packaging requires to have version like MAJOR.MINOR.PATCH
         var adjustedVersion = rootProject.extra["desktop.version_name"] as String

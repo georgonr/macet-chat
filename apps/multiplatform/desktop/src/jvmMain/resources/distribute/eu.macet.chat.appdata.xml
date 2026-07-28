@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>eu.macet.chat</id>
+  <launchable type="desktop-id">eu.macet.chat.desktop</launchable>
+  <metadata_license>FSFAP</metadata_license>
+  <project_license>AGPL-3.0</project_license>
+  <name>Macet Secure Chat</name>
+  <summary>Private and secure messenger - no user IDs (not even random numbers)</summary>
+
+  <description>
+    <p>Macet Secure Chat features:</p>
+    <ul>
+      <li>end-to-end encrypted messages, with editing, replies and deletion of messages.</li>
+      <li>sending end-to-end encrypted images and files.</li>
+      <li>single-use and long-term user addresses.</li>
+      <li>secret chat groups - only group members know it exists and who is the member.</li>
+      <li>end-to-end encrypted audio and video calls.</li>
+      <li>private instant notifications.</li>
+      <li>portable chat profile - you can transfer your chat contacts and history to another device.</li>
+      <li>encrypted app database and files in the app storage (except videos).</li>
+      <li>18 interface languages.</li>
+    </ul>
+    <p>Macet Secure Chat advantages:</p>
+    <ul>
+      <li><em>Full privacy of your identity, profile, contacts and metadata</em>: unlike any other existing messaging platform, it uses no phone numbers or any other identifiers assigned to the users - not even random numbers. This protects the privacy of who you are communicating with, hiding it from the servers and from any observers.</li>
+      <li><em>Complete protection against spam and abuse</em>: as you have no identifier on the platform, you cannot be contacted unless you share a one-time invitation link or an optional temporary user address.</li>
+      <li><em>Full ownership, control and security of your data</em>: all user data is stored on client devices, the messages are only held temporarily on the relay servers until they are received.</li>
+    </ul>
+    <p>You can connect to anybody you know via link or scan QR code (in the video call or in person) and start sending messages instantly - no emails, phone numbers or passwords needed.</p>
+    <p>Your profile and contacts are only stored in the app on your device.</p>
+    <p>All messages are end-to-end encrypted using the open-source double-ratchet protocol; the messages are routed via the Macet servers using the open-source SimpleX Messaging Protocol.</p>
+  </description>
+
+  <url type="homepage">https://macet.eu</url>
+
+  <content_rating type="oars-1.1"/>
+</component>
