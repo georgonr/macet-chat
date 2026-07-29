@@ -31,7 +31,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "5CA059C9279559F40002BEB4"
-               BuildableName = "SimpleX.app"
+               BuildableName = "Macet.app"
                BlueprintName = "SimpleX (iOS)"
                ReferencedContainer = "container:SimpleX.xcodeproj">
             </BuildableReference>
@@ -62,7 +62,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "5CA059C9279559F40002BEB4"
-            BuildableName = "SimpleX.app"
+            BuildableName = "Macet.app"
             BlueprintName = "SimpleX (iOS)"
             ReferencedContainer = "container:SimpleX.xcodeproj">
          </BuildableReference>
@@ -74,14 +74,13 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES"
-      askForAppToLaunch = "Yes"
       launchAutomaticallySubstyle = "2">
       <BuildableProductRunnable
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "5CA059C9279559F40002BEB4"
-            BuildableName = "SimpleX.app"
+            BuildableName = "Macet.app"
             BlueprintName = "SimpleX (iOS)"
             ReferencedContainer = "container:SimpleX.xcodeproj">
          </BuildableReference>
