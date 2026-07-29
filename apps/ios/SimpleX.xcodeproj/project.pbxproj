@@ -70,6 +70,7 @@
 		5C971E1D27AEBEF600C8A3CE /* ChatInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C971E1C27AEBEF600C8A3CE /* ChatInfoView.swift */; };
 		5C971E2127AEBF8300C8A3CE /* ChatInfoImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C971E2027AEBF8300C8A3CE /* ChatInfoImage.swift */; };
 		5C9A5BDB2871E05400A5B906 /* SetNotificationsMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C9A5BDA2871E05400A5B906 /* SetNotificationsMode.swift */; };
+		5CAACE7000000000000000B1 /* OnboardingButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CAACE7000000000000000B2 /* OnboardingButtonStyle.swift */; };
 		5C9C2DA52894777E00CC63B1 /* GroupProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C9C2DA42894777E00CC63B1 /* GroupProfileView.swift */; };
 		5C9C2DA7289957AE00CC63B1 /* AdvancedNetworkSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C9C2DA6289957AE00CC63B1 /* AdvancedNetworkSettings.swift */; };
 		5C9C2DA92899DA6F00CC63B1 /* NetworkAndServers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C9C2DA82899DA6F00CC63B1 /* NetworkAndServers.swift */; };
@@ -403,6 +404,7 @@
 		5C971E1C27AEBEF600C8A3CE /* ChatInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatInfoView.swift; sourceTree = "<group>"; };
 		5C971E2027AEBF8300C8A3CE /* ChatInfoImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatInfoImage.swift; sourceTree = "<group>"; };
 		5C9A5BDA2871E05400A5B906 /* SetNotificationsMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetNotificationsMode.swift; sourceTree = "<group>"; };
+		5CAACE7000000000000000B2 /* OnboardingButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingButtonStyle.swift; sourceTree = "<group>"; };
 		5C9C2DA42894777E00CC63B1 /* GroupProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupProfileView.swift; sourceTree = "<group>"; };
 		5C9C2DA6289957AE00CC63B1 /* AdvancedNetworkSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedNetworkSettings.swift; sourceTree = "<group>"; };
 		5C9C2DA82899DA6F00CC63B1 /* NetworkAndServers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkAndServers.swift; sourceTree = "<group>"; };
@@ -867,6 +869,7 @@
 				5CB0BA992827FD8800B3292C /* HowItWorks.swift */,
 				5CB0BA91282713FD00B3292C /* CreateProfile.swift */,
 				5C9A5BDA2871E05400A5B906 /* SetNotificationsMode.swift */,
+				5CAACE7000000000000000B2 /* OnboardingButtonStyle.swift */,
 				5CBD285B29575B8E00EC2CF4 /* WhatsNewView.swift */,
 				640743602CD360E600158442 /* ChooseServerOperators.swift */,
 				E5A0B0022F960000AAAA0001 /* YourNetwork.swift */,
@@ -1468,6 +1471,7 @@
 				5C9D13A3282187BB00AB8B43 /* WebRTC.swift in Sources */,
 				8CBC14862D357CDB00BBD901 /* StorageView.swift in Sources */,
 				5C9A5BDB2871E05400A5B906 /* SetNotificationsMode.swift in Sources */,
+				5CAACE7000000000000000B1 /* OnboardingButtonStyle.swift in Sources */,
 				5CB0BA8E2827126500B3292C /* OnboardingView.swift in Sources */,
 				E559A0A12E3F77EE00B26F74 /* CommandsMenuView.swift in Sources */,
 				6442E0BE2880182D00CEC0F9 /* GroupChatInfoView.swift in Sources */,
