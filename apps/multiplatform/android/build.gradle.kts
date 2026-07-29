@@ -94,6 +94,13 @@ android {
     buildFeatures {
         buildConfig = true
     }
+    bundle {
+        // One language, so there is nothing to split on. Without this Play still generates a
+        // language split and the install picks up an empty config APK for the device locale.
+        language {
+            enableSplit = false
+        }
+    }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -103,35 +110,10 @@ android {
     android.sourceSets["main"].assets.setSrcDirs(listOf("../common/src/commonMain/resources/assets"))
     val isRelease = gradle.startParameter.taskNames.find { it.lowercase().contains("release") } != null
     val isBundle = gradle.startParameter.taskNames.find { it.lowercase().contains("bundle") } != null
-    // Comma separated list of languages that will be included in the apk
-    android.defaultConfig.resourceConfigurations += listOf(
-        "en",
-        "ar",
-        "bg",
-        "ca",
-        "cs",
-        "de",
-        "es",
-        "fa",
-        "fi",
-        "fr",
-        "hu",
-        "in",
-        "it",
-        "iw",
-        "ja",
-        "lt",
-        "nl",
-        "pl",
-        "pt-rBR",
-        "ro",
-        "ru",
-        "th",
-        "tr",
-        "uk",
-        "vi",
-        "zh-rCN"
-    )
+    // The only language this build ships. Keeping the list at one entry also strips the
+    // translations that arrive through dependencies - AndroidX alone carries dozens.
+    // AGP 8.7 has no androidResources.localeFilters yet; that is the 8.9+ spelling of this.
+    android.defaultConfig.resourceConfigurations += listOf("en")
     ndkVersion = "23.1.7779620"
     if (isBundle) {
         defaultConfig.ndk.abiFilters("arm64-v8a", "armeabi-v7a")
