@@ -99,9 +99,13 @@ Requires JDK 17+, the Android SDK with NDK `23.1.7779620` and cmake `3.22.1`.
 
 ### Windows desktop
 
-Requires JDK 17+ (JDK 21 is what the releases are built with) and the Android SDK, because the
-`common` module is also an Android library. Neither the Haskell core nor its JNI shim is built
-from source, so no MinGW, cmake or GHC is needed.
+Requires JDK 17+ and the Android SDK, because the `common` module is also an Android library.
+Neither the Haskell core nor its JNI shim is built from source, so no MinGW, cmake or GHC is
+needed.
+
+The JDK has to ship `jpackage`, which rules out the JBR that comes with Android Studio — it is
+fine for the Android build but `:desktop:checkRuntime` fails on it with `'jpackage.exe' is
+missing`. Point `JAVA_HOME` at a full JDK for the desktop build.
 
 1. **Native libraries.** `libsimplex.dll` (the Haskell core), `libapp-lib.dll` (the JNI shim),
    `libcrypto-3-x64.dll` (OpenSSL) and the VLC libraries used for video playback are taken from
