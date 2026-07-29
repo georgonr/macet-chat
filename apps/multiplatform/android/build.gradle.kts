@@ -19,7 +19,7 @@ val keystoreProperties = Properties().apply {
 }
 
 android {
-    compileSdk = 35
+    compileSdk = 36
 
     signingConfigs {
         if (keystoreProperties.isNotEmpty()) {
@@ -37,7 +37,7 @@ android {
         // namespace stays as the original Java/Kotlin package of the sources
         namespace = "chat.simplex.app"
         minSdk = 26
-        targetSdk = 35
+        targetSdk = 36
         // !!!
         // skip version code after release to F-Droid, as it uses two version codes
         versionCode = (extra["android.version_code"] as String).toInt()
