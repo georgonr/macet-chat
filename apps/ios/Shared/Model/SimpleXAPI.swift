@@ -794,6 +794,13 @@ func setServerOperators(operators: [ServerOperator]) async throws -> ServerOpera
     throw r.unexpected
 }
 
+func setServerOperatorsSync(operators: [ServerOperator]) throws -> ServerOperatorConditions {
+    let r: ChatResponse0 = try chatSendCmdSync(.apiSetServerOperators(operators: operators))
+    if case let .serverOperatorConditions(conditions) = r { return conditions }
+    logger.error("setServerOperators error: \(String(describing: r))")
+    throw r.unexpected
+}
+
 func getUserServers() async throws -> [UserOperatorServers] {
     let userId = try currentUserId("getUserServers")
     let r: ChatResponse0 = try await chatSendCmd(.apiGetUserServers(userId: userId))
@@ -805,6 +812,22 @@ func getUserServers() async throws -> [UserOperatorServers] {
 func setUserServers(userServers: [UserOperatorServers]) async throws {
     let userId = try currentUserId("setUserServers")
     let r: ChatResponse2 = try await chatSendCmd(.apiSetUserServers(userId: userId, userServers: userServers))
+    if case .cmdOk = r { return }
+    logger.error("setUserServers error: \(String(describing: r))")
+    throw r.unexpected
+}
+
+// Synchronous variants taking an explicit userId, so that the Macet server enforcement can run
+// from startChat() for every profile without leaving the synchronous context - see MacetServers.swift
+func getUserServersSync(userId: Int64) throws -> [UserOperatorServers] {
+    let r: ChatResponse0 = try chatSendCmdSync(.apiGetUserServers(userId: userId))
+    if case let .userServers(_, userServers) = r { return userServers }
+    logger.error("getUserServers error: \(String(describing: r))")
+    throw r.unexpected
+}
+
+func setUserServersSync(userId: Int64, userServers: [UserOperatorServers]) throws {
+    let r: ChatResponse2 = try chatSendCmdSync(.apiSetUserServers(userId: userId, userServers: userServers))
     if case .cmdOk = r { return }
     logger.error("setUserServers error: \(String(describing: r))")
     throw r.unexpected
