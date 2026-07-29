@@ -27,27 +27,46 @@ The wording is deliberately plain. It states what is encrypted, and it also stat
 still sees — IP addresses, connection times, transferred volume — because the privacy policy says
 so and the listing must not say otherwise.
 
-## Screenshots — still missing
+## Screenshots
 
-Play wants at least two phone screenshots; four or more is better. **They are not in this
-directory yet.** Two things blocked capturing them on this machine:
+`screenshots/screenshot-1.png` … `screenshot-4.png`, 720×1280 each (9:16), 24-bit PNG:
 
-- `adb exec-out screencap` returns an all-black frame on the API 35 emulator used here. The app
-  renders through Skia/GL under gfxstream and the composited output is not captured. The system
-  status bar comes through, the app surface does not.
-- The app itself does not currently get past "Opening database…" on that emulator. This is not
-  caused by the app: a build of the exact configuration that was verified working earlier
-  (compileSdk 35 / targetSdk 35) hangs the same way, so it is the emulator environment on this
-  host, not a regression.
+| file | screen |
+|---|---|
+| `screenshot-1.png` | chat list |
+| `screenshot-2.png` | open conversation |
+| `screenshot-3.png` | *Network & servers*, Macet as the only operator |
+| `screenshot-4.png` | *Settings* |
 
-To produce them, on a machine with a working emulator or a physical device:
+Captured on a physical Xiaomi (720×1600 panel, MIUI) and cropped to 9:16 without upscaling. 720×1280
+is below the 1080×1920 that reads best in the store listing — recapture on a higher-resolution device
+before a release that cares about it.
 
-1. Install the release build and complete onboarding.
-2. Capture at least four portrait phone screenshots, 1080×1920 or larger, PNG or JPEG:
-   - the chat list with a few conversations,
-   - an open conversation,
-   - *Network & servers* showing the Macet servers,
-   - *Settings*, or the onboarding "Network commitments" screen.
-3. Drop them here as `screenshot-1.png` … `screenshot-4.png`.
+### Turn *Protect app screen* off before capturing, and back on afterwards
 
-Avoid personal data in the frames — use test profiles.
+`privacyProtectScreen` defaults to `true` and `MainActivity` sets `FLAG_SECURE` from it, so **every
+screenshot and screen recording of the app comes out solid black** — `adb exec-out screencap`
+included. Only the system status bar survives. This is the app working as intended, not a capture
+bug, and it is easy to mistake for one.
+
+Turn it off in the app under *Settings → Privacy & security → Protect app screen*, capture, then
+**turn it back on**. The toggle clears the window flag immediately, so no restart is needed.
+
+Verify a capture is not black before trusting it — mean luma of a valid dark-theme frame here is
+around 30, of a blocked one exactly 0.
+
+### Capturing on MIUI
+
+`adb shell input tap` and `input keyevent` fail with `SecurityException: … requires the caller to
+have the INJECT_EVENTS permission`, so the screens cannot be driven from adb — navigate by hand.
+`adb shell am start`, `adb exec-out screencap` and `adb shell uiautomator dump` all work, and the
+`uiautomator` dump is enough to confirm which screen is showing and what is on it.
+
+Note that `adb exec-out screencap -p > file.png` corrupts the PNG when the redirection is done by
+PowerShell; use a POSIX shell, or `adb shell screencap -p /sdcard/x.png` followed by `adb pull`.
+
+### Before capturing
+
+Use test profiles and keep personal data out of the frames. Also dismiss the first-run
+*Reachable chat toolbar* card on the chat list (and the dialog that follows it) — it otherwise sits
+in the middle of the screenshot and makes the app look half-configured.
