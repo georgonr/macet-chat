@@ -20,58 +20,20 @@ private enum NetworkAlert: Identifiable {
     }
 }
 
-private enum NetworkAndServersSheet: Identifiable {
-    case showConditions
-
-    var id: String {
-        switch self {
-        case .showConditions: return "showConditions"
-        }
-    }
-}
-
 struct NetworkAndServers: View {
     @Environment(\.dismiss) var dismiss: DismissAction
     @EnvironmentObject var m: ChatModel
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     @EnvironmentObject var theme: AppTheme
     @EnvironmentObject var ss: SaveableSettings
-    @State private var sheetItem: NetworkAndServersSheet? = nil
     @State private var justOpened = true
     @State private var showSaveDialog = false
 
     var body: some View {
         VStack {
             List {
-                let conditionsAction = m.conditions.conditionsAction
-                let anyOperatorEnabled = ss.servers.userServers.contains(where: { $0.operator?.enabled ?? false })
-                Section {
-                    ForEach(ss.servers.userServers.enumerated().map { $0 }, id: \.element.id) { idx, userOperatorServers in
-                        if let serverOperator = userOperatorServers.operator {
-                            serverOperatorView(idx, serverOperator)
-                        } else {
-                            EmptyView()
-                        }
-                    }
-
-                    if let conditionsAction = conditionsAction, anyOperatorEnabled {
-                        conditionsButton(conditionsAction)
-                    }
-                } header: {
-                    Text("Preset servers")
-                        .foregroundColor(theme.colors.secondary)
-                } footer: {
-                    switch conditionsAction {
-                    case let .review(_, deadline, _):
-                        if let deadline = deadline, anyOperatorEnabled {
-                            Text("Conditions will be accepted on: \(conditionsTimestamp(deadline)).")
-                                .foregroundColor(theme.colors.secondary)
-                        }
-                    default:
-                        EmptyView()
-                    }
-                }
-
+                // The preset operators section is gone - Macet is the only operator of this
+                // build and its servers live in the operator-less group, see MacetServers.swift.
                 Section {
                     if let idx = ss.servers.userServers.firstIndex(where: { $0.operator == nil }) {
                         NavigationLink {
@@ -174,48 +136,8 @@ struct NetworkAndServers: View {
             }
             Button("Exit without saving") { dismiss() }
         }
-        .sheet(item: $sheetItem) { item in
-            switch item {
-            case .showConditions:
-                UsageConditionsView(
-                    currUserServers: $ss.servers.currUserServers,
-                    userServers: $ss.servers.userServers
-                )
-                .modifier(ThemedBackground(grouped: true))
-            }
-        }
     }
 
-    private func serverOperatorView(_ operatorIndex: Int, _ serverOperator: ServerOperator) -> some View {
-        NavigationLink() {
-            OperatorView(
-                currUserServers: $ss.servers.currUserServers,
-                userServers: $ss.servers.userServers,
-                serverErrors: $ss.servers.serverErrors,
-                serverWarnings: $ss.servers.serverWarnings,
-                operatorIndex: operatorIndex,
-                useOperator: serverOperator.enabled
-            )
-            .navigationBarTitle("\(serverOperator.tradeName) servers")
-            .modifier(ThemedBackground(grouped: true))
-            .navigationBarTitleDisplayMode(.large)
-        } label: {
-            HStack {
-                Image(serverOperator.logo(colorScheme))
-                    .resizable()
-                    .scaledToFit()
-                    .grayscale(serverOperator.enabled ? 0.0 : 1.0)
-                    .frame(width: 24, height: 24)
-                Text(serverOperator.tradeName)
-                    .foregroundColor(serverOperator.enabled ? theme.colors.onBackground : theme.colors.secondary)
-
-                if ss.servers.userServers[operatorIndex] != ss.servers.currUserServers[operatorIndex] {
-                    Spacer()
-                    unsavedChangesIndicator()
-                }
-            }
-        }
-    }
 
     private func unsavedChangesIndicator() -> some View {
         Image(systemName: "pencil")
@@ -224,18 +146,6 @@ struct NetworkAndServers: View {
             .frame(maxWidth: 24, maxHeight: 24, alignment: .center)
     }
 
-    private func conditionsButton(_ conditionsAction: UsageConditionsAction) -> some View {
-        Button {
-            sheetItem = .showConditions
-        } label: {
-            switch conditionsAction {
-            case .review:
-                Text("Review conditions")
-            case .accepted:
-                Text("Accepted conditions")
-            }
-        }
-    }
 }
 
 struct UsageConditionsView: View {
