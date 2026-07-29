@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,39 +26,22 @@ import chat.simplex.common.ui.theme.DEFAULT_PADDING
 import chat.simplex.common.views.helpers.*
 import chat.simplex.res.MR
 import dev.icerock.moko.resources.compose.stringResource
-import kotlinx.coroutines.delay
 import java.util.Locale
 
 @Composable
 actual fun AppearanceView(m: ChatModel) {
   AppearanceScope.AppearanceLayout(
-    m.controller.appPrefs.appLanguage,
     m.controller.appPrefs.systemDarkTheme,
   )
 }
 
 @Composable
 fun AppearanceScope.AppearanceLayout(
-  languagePref: SharedPreference<String?>,
   systemDarkTheme: SharedPreference<String?>,
 ) {
   ColumnWithScrollBar {
     AppBarTitle(stringResource(MR.strings.appearance_settings))
-    SectionView(stringResource(MR.strings.settings_section_title_language), contentPadding = PaddingValues()) {
-      val state = rememberSaveable { mutableStateOf(languagePref.get() ?: "system") }
-      LangSelector(state) {
-        state.value = it
-        withApi {
-          delay(200)
-          if (it == "system") {
-            languagePref.set(null)
-            Locale.setDefault(defaultLocale)
-          } else {
-            languagePref.set(it)
-            Locale.setDefault(Locale.forLanguageTag(it))
-          }
-        }
-      }
+    SectionView(stringResource(MR.strings.settings_section_title_interface), contentPadding = PaddingValues()) {
       SettingsPreferenceItem(icon = null, stringResource(MR.strings.one_hand_ui), ChatModel.controller.appPrefs.oneHandUI)
       if (remember { appPrefs.oneHandUI.state }.value && !remember { appPrefs.chatBottomBar.state }.value) {
         SettingsPreferenceItem(icon = null, stringResource(MR.strings.chat_bottom_bar), ChatModel.controller.appPrefs.chatBottomBar)

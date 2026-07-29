@@ -1088,51 +1088,6 @@ object AppearanceScope {
     }
   }
 
-
-
-  @Composable
-  fun LangSelector(state: State<String>, onSelected: (String) -> Unit) {
-    // Should be the same as in app/build.gradle's `android.defaultConfig.resConfigs`
-    val supportedLanguages = mapOf(
-      "system" to generalGetString(MR.strings.language_system),
-      "en" to "English",
-      "ar" to "العربية",
-      "bg" to "Български",
-      "ca" to "Català",
-      "cs" to "Čeština",
-      "de" to "Deutsch",
-      "es" to "Español",
-      "fa" to "فارسی",
-      "fi" to "Suomi",
-      "fr" to "Français",
-      "hu" to "Magyar",
-      "in" to "Indonesia",
-      "it" to "Italiano",
-      "iw" to "עִברִית",
-      "ja" to "日本語",
-      "lt" to "Lietuvių",
-      "nl" to "Nederlands",
-      "pl" to "Polski",
-      "pt-BR" to "Português, Brasil",
-      "ro" to "Română",
-      "ru" to "Русский",
-      "th" to "ภาษาไทย",
-      "tr" to "Türkçe",
-      "uk" to "Українська",
-      "vi" to "Tiếng Việt",
-      "zh-CN" to "简体中文"
-    )
-    val values by remember(appPrefs.appLanguage.state.value) { mutableStateOf(supportedLanguages.map { it.key to it.value }) }
-    ExposedDropDownSettingRow(
-      generalGetString(MR.strings.settings_section_title_language).lowercase().replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.US) else it.toString() },
-      values,
-      state,
-      icon = null,
-      enabled = remember { mutableStateOf(true) },
-      onSelected = onSelected
-    )
-  }
-
   @Composable
   private fun ColorModeSelector(state: State<DefaultThemeMode?>, onSelected: (DefaultThemeMode?) -> Unit) {
     val values by remember(appPrefs.appLanguage.state.value) {

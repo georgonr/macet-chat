@@ -4,7 +4,6 @@ import SectionBottomSpacer
 import SectionDividerSpaced
 import SectionSpacer
 import SectionView
-import android.app.Activity
 import android.content.ComponentName
 import android.content.pm.PackageManager
 import android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DEFAULT
@@ -17,12 +16,10 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import dev.icerock.moko.resources.compose.stringResource
 import androidx.compose.ui.unit.dp
 import chat.simplex.common.model.*
@@ -31,12 +28,10 @@ import chat.simplex.common.views.helpers.*
 import chat.simplex.common.model.ChatModel
 import chat.simplex.common.platform.*
 import chat.simplex.common.helpers.APPLICATION_ID
-import chat.simplex.common.helpers.saveAppLocale
 import chat.simplex.common.model.ChatController.appPrefs
 import chat.simplex.res.MR
 import dev.icerock.moko.resources.ImageResource
 import dev.icerock.moko.resources.compose.painterResource
-import kotlinx.coroutines.delay
 
 enum class AppIcon(val image: ImageResource) {
   DEFAULT(MR.images.ic_macet_light),
@@ -64,7 +59,6 @@ actual fun AppearanceView(m: ChatModel) {
   }
   AppearanceScope.AppearanceLayout(
     appIcon,
-    m.controller.appPrefs.appLanguage,
     m.controller.appPrefs.systemDarkTheme,
     changeIcon = ::setAppIcon,
   )
@@ -73,39 +67,12 @@ actual fun AppearanceView(m: ChatModel) {
 @Composable
 fun AppearanceScope.AppearanceLayout(
   icon: MutableState<AppIcon>,
-  languagePref: SharedPreference<String?>,
   systemDarkTheme: SharedPreference<String?>,
   changeIcon: (AppIcon) -> Unit,
 ) {
   ColumnWithScrollBar {
     AppBarTitle(stringResource(MR.strings.appearance_settings))
     SectionView(stringResource(MR.strings.settings_section_title_interface), contentPadding = PaddingValues()) {
-      val context = LocalContext.current
-      //      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-      //        SectionItemWithValue(
-      //          generalGetString(MR.strings.settings_section_title_language).lowercase().replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.US) else it.toString() },
-      //          remember { mutableStateOf("system") },
-      //          listOf(ValueTitleDesc("system", generalGetString(MR.strings.change_verb), "")),
-      //          onSelected = { openSystemLangPicker(context as? Activity ?: return@SectionItemWithValue) }
-      //        )
-      //      } else {
-      val state = rememberSaveable { mutableStateOf(languagePref.get() ?: "system") }
-      LangSelector(state) {
-        state.value = it
-        withApi {
-          delay(200)
-          val activity = context as? Activity
-          if (activity != null) {
-            if (it == "system") {
-              activity.saveAppLocale(languagePref)
-            } else {
-              activity.saveAppLocale(languagePref, it)
-            }
-          }
-        }
-      }
-      //      }
-
       SettingsPreferenceItem(icon = null, stringResource(MR.strings.one_hand_ui), ChatModel.controller.appPrefs.oneHandUI) { enabled ->
         if (enabled) appPrefs.chatBottomBar.set(true)
       }
@@ -171,7 +138,6 @@ fun PreviewAppearanceSettings() {
   SimpleXTheme {
     AppearanceScope.AppearanceLayout(
       icon = remember { mutableStateOf(AppIcon.DARK_BLUE) },
-      languagePref = SharedPreference({ null }, {}),
       systemDarkTheme = SharedPreference({ null }, {}),
       changeIcon = {},
     )
