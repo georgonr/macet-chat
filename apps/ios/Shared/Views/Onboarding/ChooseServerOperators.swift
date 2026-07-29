@@ -158,16 +158,14 @@ struct OnboardingConditionsView: View {
                     await MainActor.run {
                         ChatModel.shared.conditions = r
                     }
-                    if let enabledOps = enabledOperators(r.serverOperators) {
-                        let r2 = try await setServerOperators(operators: enabledOps)
-                        await MainActor.run {
-                            ChatModel.shared.conditions = r2
-                            completeOnboarding()
-                        }
-                    } else {
-                        await MainActor.run {
-                            completeOnboarding()
-                        }
+                    // Upstream enables the selected preset operators here. Macet is the only operator
+                    // of this build, so accepting the conditions must not enable them - it used to undo
+                    // the work of applyMacetServers and bring the SimpleX Chat and Flux rows back,
+                    // see MacetServers.swift. This also refreshes ChatModel.conditions, so it has to
+                    // run after the assignment above, not before it.
+                    applyMacetServersToAllUsers()
+                    await MainActor.run {
+                        completeOnboarding()
                     }
                 } catch let error {
                     await MainActor.run {
@@ -191,35 +189,6 @@ struct OnboardingConditionsView: View {
         m.onboardingStage = .onboardingComplete
     }
 
-    private func enabledOperators(_ operators: [ServerOperator]) -> [ServerOperator]? {
-        var ops = operators
-        if !ops.isEmpty {
-            for i in 0..<ops.count {
-                var op = ops[i]
-                op.enabled = selectedOperatorIds.contains(op.operatorId)
-                ops[i] = op
-            }
-            let haveSMPStorage = ops.contains(where: { $0.enabled && $0.smpRoles.storage })
-            let haveSMPProxy = ops.contains(where: { $0.enabled && $0.smpRoles.proxy })
-            let haveXFTPStorage = ops.contains(where: { $0.enabled && $0.xftpRoles.storage })
-            let haveXFTPProxy = ops.contains(where: { $0.enabled && $0.xftpRoles.proxy })
-            if haveSMPStorage && haveSMPProxy && haveXFTPStorage && haveXFTPProxy {
-                return ops
-            } else if let firstEnabledIndex = ops.firstIndex(where: { $0.enabled }) {
-                var op = ops[firstEnabledIndex]
-                if !haveSMPStorage { op.smpRoles.storage = true }
-                if !haveSMPProxy { op.smpRoles.proxy = true }
-                if !haveXFTPStorage { op.xftpRoles.storage = true }
-                if !haveXFTPProxy { op.xftpRoles.proxy = true }
-                ops[firstEnabledIndex] = op
-                return ops
-            } else {
-                return nil
-            }
-        } else {
-            return nil
-        }
-    }
 }
 
 private enum ChooseServerOperatorsSheet: Identifiable {
