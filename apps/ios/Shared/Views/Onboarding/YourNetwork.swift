@@ -145,8 +145,12 @@ struct YourNetworkView: View {
         ZStack {
             Button {
                 applyNotificationMode()
-                onboardingStageDefault.set(.step4_NetworkCommitments)
-                nextStepNavLinkActive = true
+                // Macet is the only operator of this build, so the operator conditions step is
+                // skipped - its Accept button requires at least one enabled preset operator.
+                // See ChooseServerOperators.swift and MacetServers.swift.
+                let m = ChatModel.shared
+                onboardingStageDefault.set(.onboardingComplete)
+                m.onboardingStage = .onboardingComplete
             } label: {
                 Text("Continue")
             }

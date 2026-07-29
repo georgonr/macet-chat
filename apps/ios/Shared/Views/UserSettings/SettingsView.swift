@@ -194,7 +194,26 @@ let privacyLocalAuthModeDefault = EnumDefault<LAMode>(defaults: UserDefaults.sta
 
 let privacyDeliveryReceiptsSet = BoolDefault(defaults: UserDefaults.standard, forKey: DEFAULT_PRIVACY_DELIVERY_RECEIPTS_SET)
 
-let onboardingStageDefault = EnumDefault<OnboardingStage>(defaults: UserDefaults.standard, forKey: DEFAULT_ONBOARDING_STAGE, withDefault: .onboardingComplete)
+/// Reads and writes the onboarding stage, mapping away the stages this build no longer shows.
+///
+/// Macet is the only operator of this build, so the operator conditions step is skipped - see
+/// ChooseServerOperators.swift. The stage is persisted in UserDefaults, so installs that were left
+/// standing on that step have to be recovered on read, otherwise they stay on a screen whose
+/// Accept button is permanently disabled (it requires at least one enabled preset operator).
+class OnboardingStageDefault {
+    private let stored = EnumDefault<OnboardingStage>(defaults: UserDefaults.standard, forKey: DEFAULT_ONBOARDING_STAGE, withDefault: .onboardingComplete)
+
+    func get() -> OnboardingStage {
+        let stage = stored.get()
+        return stage == .step4_NetworkCommitments ? .onboardingComplete : stage
+    }
+
+    func set(_ stage: OnboardingStage) {
+        stored.set(stage)
+    }
+}
+
+let onboardingStageDefault = OnboardingStageDefault()
 
 let customDisappearingMessageTimeDefault = IntDefault(defaults: UserDefaults.standard, forKey: DEFAULT_CUSTOM_DISAPPEARING_MESSAGE_TIME)
 

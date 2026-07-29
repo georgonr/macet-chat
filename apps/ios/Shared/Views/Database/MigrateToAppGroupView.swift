@@ -110,8 +110,8 @@ struct MigrateToAppGroupView: View {
                         do {
                             resetChatCtrl()
                             try initializeChat(start: true)
-                            onboardingStageDefault.set(.step4_NetworkCommitments)
-                            chatModel.onboardingStage = .step4_NetworkCommitments
+                            onboardingStageDefault.set(.onboardingComplete)
+                            chatModel.onboardingStage = .onboardingComplete
                             setV3DBMigration(.ready)
                         } catch let error {
                             dbContainerGroupDefault.set(.documents)
