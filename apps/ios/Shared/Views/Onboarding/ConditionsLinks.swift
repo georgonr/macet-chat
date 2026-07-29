@@ -1,5 +1,5 @@
 //
-//  ChooseServerOperators.swift
+//  ConditionsLinks.swift
 //  SimpleX (iOS)
 //
 //  Created by spaced4ndy on 31.10.2024.

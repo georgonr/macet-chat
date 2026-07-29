@@ -4,8 +4,8 @@
 //
 //  Copyright © 2024 SimpleX Chat. All rights reserved.
 //
-//  Extracted from ChooseServerOperators.swift, which holds the operator picker this build does
-//  not use. The style itself is shared by the onboarding screens and by the database views.
+//  Extracted from the operator picker file, which this build no longer ships - see
+//  MacetServers.swift. The style itself is shared by the onboarding and database views.
 //
 
 import SwiftUI
