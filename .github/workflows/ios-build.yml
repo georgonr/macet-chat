@@ -1,0 +1,75 @@
+name: iOS signed build
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: macos-latest
+    timeout-minutes: 90
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Info o stroji
+        run: |
+          echo "architektura: $(uname -m)"
+          sw_vers
+          echo "=== dostupne Xcode ==="
+          ls /Applications | grep -i xcode
+          echo "=== aktivny Xcode ==="
+          xcodebuild -version
+          echo "=== iOS SDK ==="
+          xcodebuild -showsdks | grep -i ios
+
+      - name: Import certifikatu a profilov
+        env:
+          CERT_B64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
+          P12_PASS: ${{ secrets.P12_PASSWORD }}
+          PROFILES_B64: ${{ secrets.PROVISIONING_PROFILES_BASE64 }}
+        run: |
+          CERT_PATH=$RUNNER_TEMP/cert.p12
+          KEYCHAIN=$RUNNER_TEMP/build.keychain-db
+          KEYCHAIN_PASS=$(uuidgen)
+
+          echo -n "$CERT_B64" | base64 --decode -o $CERT_PATH
+
+          security create-keychain -p "$KEYCHAIN_PASS" $KEYCHAIN
+          security set-keychain-settings -lut 21600 $KEYCHAIN
+          security unlock-keychain -p "$KEYCHAIN_PASS" $KEYCHAIN
+
+          security import $CERT_PATH -P "$P12_PASS" -A \
+            -t cert -f pkcs12 -k $KEYCHAIN
+          security set-key-partition-list -S apple-tool:,apple: \
+            -k "$KEYCHAIN_PASS" $KEYCHAIN
+          security list-keychain -d user -s $KEYCHAIN
+
+          echo "=== identity v keychaine ==="
+          security find-identity -v -p codesigning $KEYCHAIN
+
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          echo -n "$PROFILES_B64" | base64 --decode -o $RUNNER_TEMP/profiles.tar.gz
+          tar -xzf $RUNNER_TEMP/profiles.tar.gz \
+            -C ~/Library/MobileDevice/Provisioning\ Profiles/
+
+          echo "=== nainstalovane profily ==="
+          ls -la ~/Library/MobileDevice/Provisioning\ Profiles/
+
+          rm $CERT_PATH $RUNNER_TEMP/profiles.tar.gz
+
+      - name: Stiahnutie core kniznic
+        run: |
+          nix --version 2>/dev/null || echo "Nix nie je - kniznice treba inak"
+          echo "=== stav Libraries ==="
+          ls -la apps/ios/Libraries/ 2>/dev/null || echo "Libraries neexistuje"
+
+      - name: Diagnostika projektu
+        run: |
+          echo "=== schemy ==="
+          xcodebuild -list -project apps/ios/SimpleX.xcodeproj
+          echo "=== nastavenia podpisovania ==="
+          grep -n "DEVELOPMENT_TEAM\|PRODUCT_BUNDLE_IDENTIFIER" \
+            apps/ios/SimpleX.xcodeproj/project.pbxproj | head -30
