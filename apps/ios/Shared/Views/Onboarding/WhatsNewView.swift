@@ -506,11 +506,6 @@ private let versionDescriptions: [VersionDescription] = [
     VersionDescription(
         version: "v6.2",
         features: [
-            .view(FeatureView(
-                icon: nil,
-                title: "Network decentralization",
-                view: { NewOperatorsView() }
-            )),
             .feature(Description(
                 icon: "briefcase",
                 title: "Business chats",
@@ -654,23 +649,6 @@ func shouldShowWhatsNew() -> Bool {
     let v = UserDefaults.standard.string(forKey: DEFAULT_WHATS_NEW_VERSION)
     setLastVersionDefault()
     return v != lastVersion
-}
-
-fileprivate struct NewOperatorsView: View {
-    var body: some View {
-        VStack(alignment: .leading) {
-            Image((operatorsInfo[.flux] ?? ServerOperator.dummyOperatorInfo).largeLogo)
-                .resizable()
-                .scaledToFit()
-                .frame(height: 48)
-            Text("The second preset operator in the app!")
-                .multilineTextAlignment(.leading)
-                .lineLimit(10)
-            HStack {
-                Text("Enable Flux in Network & servers settings for better metadata privacy.")
-            }
-        }
-    }
 }
 
 fileprivate struct CreateUpdateAddressShortLink: View {
