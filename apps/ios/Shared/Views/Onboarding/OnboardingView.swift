@@ -29,11 +29,10 @@ struct OnboardingView: View {
                 YourNetworkView()
                     .navigationBarBackButtonHidden(true)
                     .modifier(ThemedBackground())
-            case .step4_NetworkCommitments:
-                OnboardingConditionsView(selectedOperatorIds: Set(ChatModel.shared.conditions.serverOperators.filter { $0.enabled }.map { $0.operatorId }))
-                    .navigationBarBackButtonHidden(true)
-                    .modifier(ThemedBackground())
-            case .onboardingComplete: EmptyView()
+            // The operator conditions step is skipped in this build - see MacetServers.swift.
+            // The case is kept because the stage is persisted in UserDefaults; installs standing
+            // on it are mapped to onboardingComplete on read, see OnboardingStageDefault.
+            case .step4_NetworkCommitments, .onboardingComplete: EmptyView()
             }
         }
     }
