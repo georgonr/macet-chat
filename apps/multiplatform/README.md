@@ -84,7 +84,9 @@ Tests are in:
 
 ## Resources & Localization
 
-- String resources: `common/src/commonMain/resources/MR/base/strings.xml` + 21 language variants
+- String resources: `common/src/commonMain/resources/MR/base/strings.xml` — English only, no
+  translation variants; `resourceConfigurations` is pinned to `en` and the bundle does not split
+  by language
 - Uses Moko Resources (`dev.icerock.moko:resources`) for cross-platform resource management
 - The `adjustFormatting` gradle task validates string resources during build
 
