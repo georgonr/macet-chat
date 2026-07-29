@@ -8,10 +8,10 @@
 // Spec: spec/client/navigation.md
 
 import SwiftUI
-import StoreKit
 import SimpleXChat
 
-let simplexTeamURL = URL(string: "simplex:/a#lrdvu2d8A1GumSmoKb2krQmtKhWXq-tyGpHuM7aMwsw?h=smp6.simplex.im")!
+// Source of this app. AGPL requires the source of the running build to be available.
+let macetSourceURL = URL(string: "https://github.com/georgonr/macet-chat")!
 
 let appVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
 
@@ -272,10 +272,8 @@ public class CodableDefault<T: Codable> {
 let networkProxyDefault: CodableDefault<NetworkProxy> = CodableDefault(defaults: UserDefaults.standard, forKey: DEFAULT_NETWORK_PROXY, withDefault: NetworkProxy.def)
 
 struct SettingsView: View {
-    @Environment(\.colorScheme) var colorScheme
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var chatModel: ChatModel
-    @EnvironmentObject var sceneDelegate: SceneDelegate
     @EnvironmentObject var theme: AppTheme
     @State private var showProgress: Bool = false
 
@@ -386,41 +384,12 @@ struct SettingsView: View {
                 } label: {
                     settingsRow("info", color: theme.colors.secondary) { Text("About SimpleX Chat") }
                 }
-                settingsRow("number", color: theme.colors.secondary) {
-                    Button("Send questions and ideas") {
-                        dismiss()
-                        DispatchQueue.main.async {
-                            // simplexTeamURL targets this same app; route to the in-app connect flow
-                            // (UIApplication.shared.open is dropped for self-owned URLs in the foreground)
-                            ChatModel.shared.appOpenUrl = simplexTeamURL
-                        }
-                    }
-                }
-                .disabled(chatModel.chatRunning != true)
-                settingsRow("envelope", color: theme.colors.secondary) { Text("[Send us email](mailto:chat@simplex.chat)") }
-            }
-
-            Section(header: Text("Support SimpleX Chat").foregroundColor(theme.colors.secondary)) {
+                // The only link left in the settings: the source of the running build, which the
+                // AGPL requires to be offered. Upstream's "support us" section had a second row
+                // pointing at the very same repository, and asking to star it makes no sense for
+                // this fork; rating it makes even less sense with no App Store listing of our own.
                 settingsRow("keyboard", color: theme.colors.secondary) {
-                    ExternalLink("Contribute", destination: URL(string: "https://github.com/simplex-chat/simplex-chat#contribute")!)
-                }
-                settingsRow("star", color: theme.colors.secondary) {
-                    Button("Rate the app") {
-                        if let scene = sceneDelegate.windowScene {
-                            SKStoreReviewController.requestReview(in: scene)
-                        }
-                    }
-                }
-                ExternalLink(destination: URL(string: "https://github.com/simplex-chat/simplex-chat")!) {
-                    ZStack(alignment: .leading) {
-                        Image(colorScheme == .dark ? "github_light" : "github")
-                            .resizable()
-                            .frame(width: 24, height: 24)
-                            .opacity(0.5)
-                            .colorMultiply(theme.colors.secondary)
-                        Text("Star on GitHub")
-                            .padding(.leading, indent)
-                    }
+                    ExternalLink("Contribute", destination: macetSourceURL)
                 }
             }
 

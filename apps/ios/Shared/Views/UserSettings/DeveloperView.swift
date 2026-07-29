@@ -16,23 +16,10 @@ struct DeveloperView: View {
     @State private var hintsUnchanged = hintDefaultsUnchanged()
     @State private var simplexLinkMode = privacySimplexLinkModeDefault.get()
 
-    @Environment(\.colorScheme) var colorScheme
-
     var body: some View {
         VStack {
             List {
                 Section {
-                    ExternalLink(destination: URL(string: "https://github.com/simplex-chat/simplex-chat")!) {
-                        ZStack(alignment: .leading) {
-                            Image(colorScheme == .dark ? "github_light" : "github")
-                                .resizable()
-                                .frame(width: 24, height: 24)
-                                .opacity(0.5)
-                                .colorMultiply(theme.colors.secondary)
-                            Text("Install SimpleX Chat for terminal")
-                                .padding(.leading, 36)
-                        }
-                    }
                     NavigationLink {
                         TerminalView()
                     } label: {
