@@ -52,7 +52,7 @@ struct PrivacySettings: View {
                 Section(header: Text("Device").foregroundColor(theme.colors.secondary)) {
                     NavigationLink {
                         SimplexLockView(prefPerformLA: $prefPerformLA, currentLAMode: $currentLAMode)
-                            .navigationTitle("SimpleX Lock")
+                            .navigationTitle("Macet Lock")
                             .modifier(ThemedBackground(grouped: true))
                     } label: {
                         if prefPerformLA {
@@ -368,7 +368,7 @@ struct PrivacySettings: View {
 
     private func simplexLockRow(_ value: LocalizedStringKey) -> some View {
         HStack {
-            Text("SimpleX Lock")
+            Text("Macet Lock")
             Spacer()
             Text(value)
         }
@@ -474,7 +474,7 @@ struct SimplexLockView: View {
                 }
 
                 if performLA {
-                    Section("Share to SimpleX") {
+                    Section("Share to Macet") {
                         Toggle("Allow sharing", isOn: $allowShareExtension)
                     }
                 }
@@ -649,7 +649,7 @@ struct SimplexLockView: View {
                 switch laMode {
                 case .system:
                     updateLAMode()
-                    authenticate(reason: NSLocalizedString("Enable SimpleX Lock", comment: "authentication reason")) { laResult in
+                    authenticate(reason: NSLocalizedString("Enable Macet Lock", comment: "authentication reason")) { laResult in
                         switch laResult {
                         case .success:
                             _ = kcAppPassword.remove()
@@ -711,7 +711,7 @@ struct SimplexLockView: View {
 
     private func enableLA() {
         resetLA()
-        authenticate(reason: NSLocalizedString("Enable SimpleX Lock", comment: "authentication reason")) { laResult in
+        authenticate(reason: NSLocalizedString("Enable Macet Lock", comment: "authentication reason")) { laResult in
             switch laResult {
             case .success:
                 m.contentViewAccessAuthenticated = true
@@ -734,7 +734,7 @@ struct SimplexLockView: View {
     }
 
     private func disableLA() {
-        authenticate(reason: NSLocalizedString("Disable SimpleX Lock", comment: "authentication reason")) { laResult in
+        authenticate(reason: NSLocalizedString("Disable Macet Lock", comment: "authentication reason")) { laResult in
             switch (laResult) {
             case .success:
                 prefPerformLA = false

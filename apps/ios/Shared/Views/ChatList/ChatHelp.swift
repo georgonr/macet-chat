@@ -19,7 +19,7 @@ struct ChatHelp: View {
 
     func chatHelp() -> some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text("Thank you for installing SimpleX Chat!")
+            Text("Thank you for installing Macet Secure Chat!")
 
             VStack(alignment: .leading, spacing: 10) {
                 Text("To make a new connection")

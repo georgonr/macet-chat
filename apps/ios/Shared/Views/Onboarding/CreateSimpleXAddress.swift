@@ -195,7 +195,7 @@ struct SendAddressMailView: View {
         MailView(
             isShowing: self.$showMailView,
             result: $mailViewResult,
-            subject: NSLocalizedString("Let's talk in SimpleX Chat", comment: "email subject"),
+            subject: NSLocalizedString("Let's talk in Macet Secure Chat", comment: "email subject"),
             messageBody: messageBody
         )
     }

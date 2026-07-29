@@ -327,7 +327,7 @@ private struct InviteView: View {
 
     @ViewBuilder private var sectionHeaderText: some View {
         if onboarding {
-            Text("Send the link via any messenger - it's secure. Ask to paste into SimpleX.")
+            Text("Send the link via any messenger - it's secure. Ask to paste into Macet.")
                 .font(.body).foregroundColor(theme.colors.onBackground).textCase(nil)
         } else {
             Text("Share this 1-time invite link").foregroundColor(theme.colors.secondary)

@@ -382,7 +382,7 @@ struct SettingsView: View {
                         .modifier(ThemedBackground())
                         .frame(maxHeight: .infinity, alignment: .top)
                 } label: {
-                    settingsRow("info", color: theme.colors.secondary) { Text("About SimpleX Chat") }
+                    settingsRow("info", color: theme.colors.secondary) { Text("About Macet Secure Chat") }
                 }
                 // The only link left in the settings: the source of the running build, which the
                 // AGPL requires to be offered. Upstream's "support us" section had a second row

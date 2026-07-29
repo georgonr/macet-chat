@@ -114,7 +114,7 @@ struct ContentView: View {
             }
         }
         .alert(isPresented: $alertManager.presentAlert) { alertManager.alertView! }
-        .confirmationDialog("SimpleX Lock mode", isPresented: $showChooseLAMode, titleVisibility: .visible) {
+        .confirmationDialog("Macet Lock mode", isPresented: $showChooseLAMode, titleVisibility: .visible) {
             Button("System authentication") { initialEnableLA() }
             Button("Passcode entry") { showSetPasscode = true }
         }
@@ -397,8 +397,8 @@ struct ContentView: View {
 
     func laNoticeAlert() -> Alert {
         Alert(
-            title: Text("SimpleX Lock"),
-            message: Text("To protect your information, turn on SimpleX Lock.\nYou will be prompted to complete authentication before this feature is enabled."),
+            title: Text("Macet Lock"),
+            message: Text("To protect your information, turn on Macet Lock.\nYou will be prompted to complete authentication before this feature is enabled."),
             primaryButton: .default(Text("Turn on")) { showChooseLAMode = true },
             secondaryButton: .cancel()
          )
@@ -406,7 +406,7 @@ struct ContentView: View {
 
     private func initialEnableLA () {
         privacyLocalAuthModeDefault.set(.system)
-        authenticate(reason: NSLocalizedString("Enable SimpleX Lock", comment: "authentication reason")) { laResult in
+        authenticate(reason: NSLocalizedString("Enable Macet Lock", comment: "authentication reason")) { laResult in
             switch laResult {
             case .success:
                 chatModel.contentViewAccessAuthenticated = true

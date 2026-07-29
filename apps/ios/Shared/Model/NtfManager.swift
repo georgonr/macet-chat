@@ -200,7 +200,7 @@ class NtfManager: NSObject, UNUserNotificationCenterDelegate, ObservableObject {
                 identifier: ntfCategoryConnectionEvent,
                 actions: [],
                 intentIdentifiers: [],
-                hiddenPreviewsBodyPlaceholder: NSLocalizedString("SimpleX encrypted message or connection event", comment: "notification")
+                hiddenPreviewsBodyPlaceholder: NSLocalizedString("Macet — new message", comment: "notification")
             ),
             UNNotificationCategory(
                 identifier: ntfCategoryManyEvents,
