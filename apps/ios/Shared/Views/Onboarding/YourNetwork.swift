@@ -10,12 +10,10 @@ import SwiftUI
 import SimpleXChat
 
 private enum YourNetworkSheet: Identifiable {
-    case configureOperators
     case configureNotifications
 
     var id: String {
         switch self {
-        case .configureOperators: return "configureOperators"
         case .configureNotifications: return "configureNotifications"
         }
     }
@@ -24,12 +22,8 @@ private enum YourNetworkSheet: Identifiable {
 struct YourNetworkView: View {
     @EnvironmentObject var theme: AppTheme
     @Environment(\.colorScheme) var colorScheme: ColorScheme
-    @State private var serverOperators: [ServerOperator] = []
-    @State private var selectedOperatorIds = Set<Int64>()
     @State private var notificationMode: NotificationsMode = .instant
     @State private var sheetItem: YourNetworkSheet? = nil
-    @State private var nextStepNavLinkActive = false
-    @State private var justOpened = true
 
     var body: some View {
         GeometryReader { g in
@@ -74,7 +68,6 @@ struct YourNetworkView: View {
                     .fixedSize(horizontal: false, vertical: true)
 
                 VStack(alignment: .leading, spacing: 20) {
-                    configureRoutersButton()
                     configureNotificationsButton()
                 }
                 .padding(.top, 15)
@@ -90,18 +83,8 @@ struct YourNetworkView: View {
             .padding(.bottom, 20)
             .frame(minHeight: g.size.height)
         }
-        .onAppear {
-            if justOpened {
-                serverOperators = ChatModel.shared.conditions.serverOperators
-                selectedOperatorIds = Set(serverOperators.filter { $0.enabled }.map { $0.operatorId })
-                justOpened = false
-            }
-        }
         .sheet(item: $sheetItem) { item in
             switch item {
-            case .configureOperators:
-                ChooseServerOperators(serverOperators: serverOperators, selectedOperatorIds: $selectedOperatorIds)
-                    .modifier(ThemedBackground())
             case .configureNotifications:
                 SetNotificationsMode(notificationMode: $notificationMode)
                     .modifier(ThemedBackground())
@@ -109,24 +92,6 @@ struct YourNetworkView: View {
         }
         .frame(maxHeight: .infinity)
         .navigationBarHidden(true)
-    }
-
-    private func configureRoutersButton() -> some View {
-        Button {
-            sheetItem = .configureOperators
-        } label: {
-            HStack(spacing: 6) {
-                Text("Setup routers")
-                    .fontWeight(.medium)
-                ForEach(serverOperators.reversed()) { op in
-                    Image(op.logo(colorScheme))
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 22, height: 22)
-                        .grayscale(selectedOperatorIds.contains(op.operatorId) ? 0.0 : 1.0)
-                }
-            }
-        }
     }
 
     private func configureNotificationsButton() -> some View {
@@ -142,30 +107,17 @@ struct YourNetworkView: View {
     }
 
     private func continueButton() -> some View {
-        ZStack {
-            Button {
-                applyNotificationMode()
-                // Macet is the only operator of this build, so the operator conditions step is
-                // skipped - its Accept button requires at least one enabled preset operator.
-                // See ChooseServerOperators.swift and MacetServers.swift.
-                let m = ChatModel.shared
-                onboardingStageDefault.set(.onboardingComplete)
-                m.onboardingStage = .onboardingComplete
-            } label: {
-                Text("Continue")
-            }
-            .buttonStyle(OnboardingButtonStyle())
-
-            NavigationLink(isActive: $nextStepNavLinkActive) {
-                OnboardingConditionsView(selectedOperatorIds: selectedOperatorIds)
-                    .navigationBarBackButtonHidden(true)
-                    .modifier(ThemedBackground())
-            } label: {
-                EmptyView()
-            }
-            .frame(width: 1, height: 1)
-            .hidden()
+        Button {
+            applyNotificationMode()
+            // Macet is the only operator of this build, so the operator conditions step is
+            // skipped - see MacetServers.swift.
+            let m = ChatModel.shared
+            onboardingStageDefault.set(.onboardingComplete)
+            m.onboardingStage = .onboardingComplete
+        } label: {
+            Text("Continue")
         }
+        .buttonStyle(OnboardingButtonStyle())
     }
 
     private func applyNotificationMode() {
