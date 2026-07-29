@@ -5,25 +5,50 @@ on:
 
 permissions:
   contents: read
+  actions: read
 
 jobs:
   build:
     runs-on: macos-latest
-    timeout-minutes: 90
+    timeout-minutes: 120
 
     steps:
       - uses: actions/checkout@v4
 
       - name: Info o stroji
         run: |
-          echo "architektura: $(uname -m)"
-          sw_vers
-          echo "=== dostupne Xcode ==="
-          ls /Applications | grep -i xcode
-          echo "=== aktivny Xcode ==="
           xcodebuild -version
-          echo "=== iOS SDK ==="
-          xcodebuild -showsdks | grep -i ios
+          xcodebuild -showsdks | grep -i "iOS SDK" -A2
+
+      - name: Instalacia Nix
+        uses: DeterminateSystems/nix-installer-action@main
+        with:
+          extra-conf: |
+            experimental-features = nix-command flakes
+            substituters = https://cache.nixos.org https://cache.iog.io https://cache.zw3rk.com
+            trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ= loony-tools:pr9m4BkM/5/eSTZlkQyRt57Jz7OMBxNSUiMC4FkcNfk=
+            fallback = true
+
+      - name: Build core kniznic (device arm64)
+        run: |
+          nix build -L '.#hydraJobs.aarch64-darwin."aarch64-darwin-ios:lib:simplex-chat"'
+          mkdir -p raw
+          find -L result -name 'pkg-ios-*.zip' -exec cp {} raw/ \;
+          ls -la raw/
+
+      - name: Rozbalenie kniznic do Libraries/ios
+        run: |
+          mkdir -p apps/ios/Libraries/ios
+          cd apps/ios/Libraries/ios
+          unzip -o $GITHUB_WORKSPACE/raw/pkg-ios-*.zip
+          chmod u+w *.a
+          echo "=== kniznice ==="
+          ls -la
+          echo "=== overenie platformy ==="
+          mkdir -p /tmp/chk && cd /tmp/chk
+          ar x $GITHUB_WORKSPACE/apps/ios/Libraries/ios/libgmp.a 2>/dev/null || true
+          OBJ=$(ls *.o 2>/dev/null | head -1)
+          [ -n "$OBJ" ] && vtool -show-build "$OBJ" | head -10
 
       - name: Import certifikatu a profilov
         env:
@@ -36,40 +61,73 @@ jobs:
           KEYCHAIN_PASS=$(uuidgen)
 
           echo -n "$CERT_B64" | base64 --decode -o $CERT_PATH
-
           security create-keychain -p "$KEYCHAIN_PASS" $KEYCHAIN
           security set-keychain-settings -lut 21600 $KEYCHAIN
           security unlock-keychain -p "$KEYCHAIN_PASS" $KEYCHAIN
-
-          security import $CERT_PATH -P "$P12_PASS" -A \
-            -t cert -f pkcs12 -k $KEYCHAIN
-          security set-key-partition-list -S apple-tool:,apple: \
-            -k "$KEYCHAIN_PASS" $KEYCHAIN
+          security import $CERT_PATH -P "$P12_PASS" -A -t cert -f pkcs12 -k $KEYCHAIN
+          security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PASS" $KEYCHAIN
           security list-keychain -d user -s $KEYCHAIN
-
-          echo "=== identity v keychaine ==="
           security find-identity -v -p codesigning $KEYCHAIN
 
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           echo -n "$PROFILES_B64" | base64 --decode -o $RUNNER_TEMP/profiles.tar.gz
-          tar -xzf $RUNNER_TEMP/profiles.tar.gz \
-            -C ~/Library/MobileDevice/Provisioning\ Profiles/
-
-          echo "=== nainstalovane profily ==="
-          ls -la ~/Library/MobileDevice/Provisioning\ Profiles/
-
+          tar -xzf $RUNNER_TEMP/profiles.tar.gz -C ~/Library/MobileDevice/Provisioning\ Profiles/
           rm $CERT_PATH $RUNNER_TEMP/profiles.tar.gz
 
-      - name: Stiahnutie core kniznic
+      - name: Archive
         run: |
-          nix --version 2>/dev/null || echo "Nix nie je - kniznice treba inak"
-          echo "=== stav Libraries ==="
-          ls -la apps/ios/Libraries/ 2>/dev/null || echo "Libraries neexistuje"
+          set -o pipefail
+          xcodebuild -project apps/ios/SimpleX.xcodeproj \
+            -scheme "SimpleX (iOS)" \
+            -configuration Release \
+            -sdk iphoneos \
+            -destination 'generic/platform=iOS' \
+            -archivePath $RUNNER_TEMP/Macet.xcarchive \
+            -allowProvisioningUpdates \
+            archive 2>&1 | tee $RUNNER_TEMP/archive.log | tail -60
 
-      - name: Diagnostika projektu
+      - name: Export IPA
         run: |
-          echo "=== schemy ==="
-          xcodebuild -list -project apps/ios/SimpleX.xcodeproj
-          echo "=== nastavenia podpisovania ==="
-          grep -n "DEVELOPMENT_TEAM\|PRODUCT_BUNDLE_IDENTIFIER" \
-            apps/ios/SimpleX.xcodeproj/project.pbxproj | head -30
+          cat > $RUNNER_TEMP/ExportOptions.plist <<'EOF'
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>method</key>
+            <string>development</string>
+            <key>teamID</key>
+            <string>MHV67VMY8T</string>
+            <key>signingStyle</key>
+            <string>automatic</string>
+            <key>compileBitcode</key>
+            <false/>
+            <key>stripSwiftSymbols</key>
+            <true/>
+          </dict>
+          </plist>
+          EOF
+
+          xcodebuild -exportArchive \
+            -archivePath $RUNNER_TEMP/Macet.xcarchive \
+            -exportPath $RUNNER_TEMP/export \
+            -exportOptionsPlist $RUNNER_TEMP/ExportOptions.plist \
+            -allowProvisioningUpdates 2>&1 | tail -40
+
+          echo "=== vysledok ==="
+          ls -la $RUNNER_TEMP/export/
+
+      - name: Nahranie IPA
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: macet-ipa
+          path: ${{ runner.temp }}/export/*.ipa
+          if-no-files-found: warn
+
+      - name: Nahranie logu
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: archive-log
+          path: ${{ runner.temp }}/archive.log
+          if-no-files-found: ignore
