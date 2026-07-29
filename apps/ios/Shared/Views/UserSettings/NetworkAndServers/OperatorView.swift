@@ -385,7 +385,7 @@ struct ConditionsTextView: View {
     @State private var failedToLoad: Bool = false
     @State private var conditionsHTML: String? = nil
 
-    let defaultConditionsLink = "https://github.com/simplex-chat/simplex-chat/blob/stable/PRIVACY.md"
+    let defaultConditionsLink = conditionsURL.absoluteString
 
     var body: some View {
         viewBody()
@@ -394,7 +394,7 @@ struct ConditionsTextView: View {
                 do {
                     let conditions = try await getUsageConditions()
                     let conditionsText = conditions.1
-                    let parentLink =  "https://github.com/simplex-chat/simplex-chat/blob/\(conditions.0.conditionsCommit)"
+                    let parentLink =  "https://github.com/georgonr/macet-chat/blob/macet-brand"
                     let preparedText: String?
                     if let conditionsText {
                         let prepared = prepareMarkdown(conditionsText.trimmingCharacters(in: .whitespacesAndNewlines), parentLink)
@@ -422,8 +422,7 @@ struct ConditionsTextView: View {
                             .fill(Color(uiColor: .secondarySystemGroupedBackground))
                     )
             } else {
-                let conditionsLink = "https://github.com/simplex-chat/simplex-chat/blob/\(usageConditions.conditionsCommit)/PRIVACY.md"
-                conditionsLinkView(conditionsLink)
+                conditionsLinkView(defaultConditionsLink)
             }
         } else if failedToLoad {
             conditionsLinkView(defaultConditionsLink)
@@ -592,16 +591,12 @@ struct SingleOperatorUsageConditionsView: View {
 }
 
 func conditionsLinkButton() -> some View {
-    let commit = ChatModel.shared.conditions.currentConditions.conditionsCommit
-    let mdUrl = URL(string: "https://github.com/simplex-chat/simplex-chat/blob/\(commit)/PRIVACY.md") ?? conditionsURL
     return Menu {
-        ExternalLink(destination: mdUrl) {
+        ExternalLink(destination: conditionsURL) {
             Label("Open conditions", systemImage: "doc")
         }
-        if let commitUrl = URL(string: "https://github.com/simplex-chat/simplex-chat/commit/\(commit)") {
-            ExternalLink(destination: commitUrl) {
-                Label("Open changes", systemImage: "ellipsis")
-            }
+        ExternalLink(destination: conditionsHistoryURL) {
+            Label("Open changes", systemImage: "ellipsis")
         }
     } label: {
         Image(systemName: "arrow.up.right.circle")
