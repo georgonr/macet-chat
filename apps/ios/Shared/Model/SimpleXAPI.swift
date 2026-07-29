@@ -2230,6 +2230,11 @@ func startChat(refreshInvitations: Bool = true, onboarding: Bool = false) throws
             }
         }
     }
+    // Macet is the only operator of this build - see MacetServers.swift. The core answers the
+    // server commands with chatNotStarted until the chat is started, so this has to come after
+    // apiStartChat. It is outside the `if !chatRunning` block so that it also runs when the chat
+    // was already running.
+    applyMacetServersToAllUsers()
     ChatReceiver.shared.start()
     m.chatRunning = true
     chatLastStartGroupDefault.set(Date.now)

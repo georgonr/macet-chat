@@ -83,10 +83,9 @@ final class WebRTCClient: NSObject, RTCVideoViewDelegate, RTCFrameEncryptorDeleg
         super.init()
     }
 
+    // Macet TURN server, the same one the Android build uses - see MacetServers.iceServer
     let defaultIceServers: [WebRTC.RTCIceServer] = [
-        WebRTC.RTCIceServer(urlStrings: ["stuns:stun.simplex.im:443"]),
-        //WebRTC.RTCIceServer(urlStrings: ["turns:turn.simplex.im:443?transport=udp"], username: "private2", credential: "Hxuq2QxUjnhj96Zq2r4HjqHRj"),
-        WebRTC.RTCIceServer(urlStrings: ["turns:turn.simplex.im:443?transport=tcp"], username: "private2", credential: "Hxuq2QxUjnhj96Zq2r4HjqHRj"),
+        WebRTC.RTCIceServer(urlStrings: ["turn:cht.macet.eu:3478"], username: "macet", credential: "FCSJMOxqOZt4W4cdXcnYNUansG1pHGT4"),
     ]
 
     // Spec: spec/services/calls.md#initializeCall
