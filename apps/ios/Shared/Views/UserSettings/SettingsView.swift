@@ -131,7 +131,7 @@ let appDefaults: [String: Any] = [
     ANDROID_DEFAULT_CALL_ON_LOCK_SCREEN: AppSettingsLockScreenCalls.show.rawValue,
 
     DEFAULT_THEME_OVERRIDES: "{}",
-    DEFAULT_CURRENT_THEME: DefaultTheme.SYSTEM_THEME_NAME,
+    DEFAULT_CURRENT_THEME: DefaultTheme.DARK.themeName,
     DEFAULT_SYSTEM_DARK_THEME: DefaultTheme.DARK.themeName,
     DEFAULT_CURRENT_THEME_IDS: "{}"
 ]
@@ -205,7 +205,7 @@ let showReportsInSupportChatAlertDefault = BoolDefault(defaults: UserDefaults.st
 
 /// after importing new database, this flag will be set and unset only after importing app settings in `initializeChat` */
 let shouldImportAppSettingsDefault = BoolDefault(defaults: UserDefaults.standard, forKey: DEFAULT_SHOULD_IMPORT_APP_SETTINGS)
-let currentThemeDefault = StringDefault(defaults: UserDefaults.standard, forKey: DEFAULT_CURRENT_THEME, withDefault: DefaultTheme.SYSTEM_THEME_NAME)
+let currentThemeDefault = StringDefault(defaults: UserDefaults.standard, forKey: DEFAULT_CURRENT_THEME, withDefault: DefaultTheme.DARK.themeName)
 let systemDarkThemeDefault = StringDefault(defaults: UserDefaults.standard, forKey: DEFAULT_SYSTEM_DARK_THEME, withDefault: DefaultTheme.DARK.themeName)
 let currentThemeIdsDefault = CodableDefault<[String: String]>(defaults: UserDefaults.standard, forKey: DEFAULT_CURRENT_THEME_IDS, withDefault: [:] )
 let themeOverridesDefault: CodableDefault<[ThemeOverrides]> = CodableDefault(defaults: UserDefaults.standard, forKey: DEFAULT_THEME_OVERRIDES, withDefault: [])
