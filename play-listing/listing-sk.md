@@ -12,7 +12,7 @@ Macet Secure Chat
 Súkromný messenger s end-to-end šifrovaním na vlastných serveroch.
 ```
 
-(65 znakov)
+(66 znakov)
 
 ## Úplný popis (max 4000 znakov)
 

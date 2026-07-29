@@ -80,10 +80,22 @@ Requires JDK 17+, the Android SDK with NDK `23.1.7779620` and cmake `3.22.1`.
 
    ```
    cd apps/multiplatform
-   ./gradlew :android:assembleRelease
+   ./gradlew :android:assembleRelease     # APKs for the download page
+   ./gradlew :android:bundleRelease       # AAB for Google Play
    ```
 
-   Output: `apps/multiplatform/android/build/outputs/apk/release/`, split per ABI.
+   Output: `apps/multiplatform/android/build/outputs/apk/release/`, split per ABI, and
+   `.../bundle/release/android-release.aab`.
+
+   **Run them as two separate invocations.** `android/build.gradle.kts` decides between ABI
+   splits and a single bundle by looking for `bundle` in `gradle.startParameter.taskNames`, so
+   asking for both tasks at once makes `isBundle` true for the whole build and `assembleRelease`
+   then emits one universal APK instead of the per-ABI pair.
+
+   The APKs are large — around 230 MB — because `compression.level` defaults to `0`, which stores
+   the native libraries uncompressed so they can be mapped instead of extracted. That is the APK
+   size, not the install size, and it does not apply to what Play serves: the same build delivered
+   as an AAB downloads at roughly 62 MiB on arm64.
 
 ### Windows desktop
 

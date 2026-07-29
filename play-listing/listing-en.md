@@ -12,7 +12,7 @@ Macet Secure Chat
 Private messenger with end-to-end encryption on self-hosted servers.
 ```
 
-(67 characters)
+(68 characters)
 
 ## Full description (max 4000 characters)
 
