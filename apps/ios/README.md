@@ -79,11 +79,8 @@ Commands follow `ChatCmdProtocol` (has `cmdString` property), sent as JSON throu
 
 ## Localization
 
-31 languages supported. Localization files in `SimpleX Localizations/`.
-
-Workflow:
-- `Product > Export Localizations` - Export XLIFF files
-- `Product > Import Localizations` - Import updated translations
+English only. `en.lproj` in each target holds the strings; `knownRegions` in the
+project is `en` plus `Base`, and there is no translation exchange workflow.
 
 ## SimpleX Assets
 
