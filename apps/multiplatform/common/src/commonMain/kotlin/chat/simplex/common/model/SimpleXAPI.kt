@@ -1309,6 +1309,15 @@ object ChatController {
   }
 
   suspend fun acceptConditions(rh: Long?, conditionsId: Long, operatorIds: List<Long>): ServerOperatorConditionsDetail? {
+    // Nothing to accept when no operator is named, and the command cannot express it: cmdString
+    // joins the ids with commas, so an empty list sends "/_accept_conditions <id> " with a missing
+    // argument and the core answers "Failed reading: empty". Macet disables every preset operator,
+    // so this is the normal state of this build rather than an edge case. Report the conditions
+    // unchanged - the caller asked for a no-op and got one.
+    if (operatorIds.isEmpty()) {
+      Log.i(TAG, "acceptConditions: no operators to accept for, not sending the command")
+      return chatModel.conditions.value
+    }
     val r = sendCmd(rh, CC.ApiAcceptConditions(conditionsId, operatorIds))
     if (r is API.Result && r.res is CR.ServerOperatorConditions) return r.res.conditions
     AlertManager.shared.showAlertMsg(

@@ -40,19 +40,33 @@ import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun OnboardingConditionsView(chatModel: ChatModel) {
-  LaunchedEffect(Unit) {
-    prepareChatBeforeFinishingOnboarding()
-  }
-
   val serverOperators = remember { derivedStateOf { chatModel.conditions.value.serverOperators } }
   val selectedOperatorIds = remember {
     mutableStateOf(OnboardingSharedState.selectedOperatorIds.ifEmpty {
       serverOperators.value.filter { it.enabled }.map { it.operatorId }.toSet()
     })
   }
+  // On desktop this step is skipped when there is no enabled preset operator - there are no
+  // conditions to accept, so the screen has nothing to offer and its Accept button was a dead end.
+  // Profiles already stored on this stage are routed into this view on startup, so skipping here is
+  // also what releases them, without resetting anything. Android is left as it was.
+  val showStep = remember { mutableStateOf(!appPlatform.isDesktop) }
+  LaunchedEffect(Unit) {
+    prepareChatBeforeFinishingOnboarding()
+    if (appPlatform.isDesktop) {
+      if (chatModel.conditions.value.serverOperators.any { it.enabled }) {
+        showStep.value = true
+      } else {
+        chatController.applyMacetServersToAllUsers(chatModel.remoteHostId())
+        completeOnboarding()
+      }
+    }
+  }
 
   if (appPlatform.isDesktop) {
-    OnboardingConditionsDesktop(selectedOperatorIds)
+    if (showStep.value) {
+      OnboardingConditionsDesktop(selectedOperatorIds)
+    }
   } else {
     CompositionLocalProvider(LocalAppBarHandler provides rememberAppBarHandler()) {
       ModalView({}, showClose = false, showAppBar = false) {
