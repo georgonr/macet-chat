@@ -167,7 +167,13 @@ private fun OnboardingConditionsDesktop(selectedOperatorIds: MutableState<Set<Lo
         }
         Spacer(Modifier.fillMaxHeight().weight(1f))
         Column(Modifier.widthIn(max = 1000.dp).align(Alignment.CenterHorizontally), horizontalAlignment = Alignment.CenterHorizontally) {
-          AcceptConditionsButton(enabled = selectedOperatorIds.value.isNotEmpty(), selectedOperatorIds)
+          // Macet is the only operator and it is not selectable, so there is nothing to wait for.
+          // Upstream gates this on selectedOperatorIds being non-empty, which can never happen in
+          // this build: the set is seeded from the *enabled* operators above, and every preset
+          // operator has just been disabled by applyMacetServers. That left Accept permanently
+          // greyed out and onboarding impossible to finish. The Android branch already passes
+          // true; this is the same fix for desktop.
+          AcceptConditionsButton(enabled = true, selectedOperatorIds)
           TextButtonBelowOnboardingButton("", null)
         }
       }
