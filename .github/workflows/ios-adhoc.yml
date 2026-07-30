@@ -98,7 +98,7 @@ jobs:
             -destination 'generic/platform=iOS' \
             -archivePath "$RUNNER_TEMP/Macet.xcarchive" \
             -allowProvisioningUpdates \
-            archive 2>&1 | tee "$RUNNER_TEMP/archive.log" | tail -60
+            archive 2>&1 | tee "$RUNNER_TEMP/archive.log" | tail -40
 
       - name: Export ad-hoc IPA
         run: |
@@ -109,13 +109,13 @@ jobs:
           <plist version="1.0">
           <dict>
             <key>method</key>
-            <string>ad-hoc</string>
+            <string>release-testing</string>
             <key>teamID</key>
             <string>MHV67VMY8T</string>
             <key>signingStyle</key>
             <string>manual</string>
             <key>signingCertificate</key>
-            <string>Apple Distribution</string>
+            <string>Apple Distribution: GexPay, SE (MHV67VMY8T)</string>
             <key>provisioningProfiles</key>
             <dict>
               <key>eu.macet.chat</key>
@@ -143,6 +143,65 @@ jobs:
 
           echo "=== vysledok ==="
           ls -la "$RUNNER_TEMP/export/"
+
+      - name: OVERENIE PODPISU
+        if: always()
+        run: |
+          IPA=$(ls "$RUNNER_TEMP/export/"*.ipa 2>/dev/null | head -1)
+          if [ -z "$IPA" ]; then
+            echo "ZIADNY IPA NEVZNIKOL"
+            exit 0
+          fi
+
+          WORK="$RUNNER_TEMP/verify"
+          mkdir -p "$WORK"
+          cp "$IPA" "$WORK/app.zip"
+          cd "$WORK"
+          unzip -o -q app.zip
+
+          APP=$(ls -d Payload/*.app | head -1)
+
+          echo "############################################"
+          echo "### PODPIS HLAVNEJ APPKY"
+          echo "############################################"
+          codesign -dvv "$APP" 2>&1 | grep -E "Authority|TeamIdentifier" || true
+
+          echo ""
+          echo "############################################"
+          echo "### PROFIL HLAVNEJ APPKY"
+          echo "############################################"
+          security cms -D -i "$APP/embedded.mobileprovision" 2>/dev/null \
+            | plutil -extract Name raw - || echo "profil sa nenasiel"
+
+          echo ""
+          echo "############################################"
+          echo "### ROZSIRENIA"
+          echo "############################################"
+          for ext in "$APP"/PlugIns/*.appex; do
+            [ -d "$ext" ] || continue
+            echo "--- $(basename "$ext")"
+            codesign -dvv "$ext" 2>&1 | grep -E "^Authority=Apple" | head -1 || true
+            security cms -D -i "$ext/embedded.mobileprovision" 2>/dev/null \
+              | plutil -extract Name raw - || echo "  profil sa nenasiel"
+            echo ""
+          done
+
+          echo "############################################"
+          echo "### ZARIADENIA V PROFILE"
+          echo "############################################"
+          security cms -D -i "$APP/embedded.mobileprovision" 2>/dev/null \
+            | plutil -extract ProvisionedDevices xml1 -o - - \
+            | grep "<string>" | sed 's/.*<string>//;s/<\/string>.*//' || echo "ziadne"
+
+          echo ""
+          echo "############################################"
+          echo "### VERDIKT"
+          echo "############################################"
+          if codesign -dvv "$APP" 2>&1 | grep -q "Authority=Apple Distribution"; then
+            echo "OK - podpisane Apple Distribution"
+          else
+            echo "CHYBA - NIE JE podpisane Apple Distribution"
+          fi
 
       - name: Nahranie IPA
         if: always()
