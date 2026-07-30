@@ -1,0 +1,134 @@
+name: iOS ad-hoc build
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: macos-latest
+    timeout-minutes: 120
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Instalacia Nix
+        uses: DeterminateSystems/nix-installer-action@main
+        with:
+          extra-conf: |
+            experimental-features = nix-command flakes
+            substituters = https://cache.nixos.org https://cache.iog.io https://cache.zw3rk.com
+            trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ= loony-tools:pr9m4BkM/5/eSTZlkQyRt57Jz7OMBxNSUiMC4FkcNfk=
+            fallback = true
+
+      - name: Build core kniznic
+        run: |
+          nix build -L '.#hydraJobs.aarch64-darwin."aarch64-darwin-ios:lib:simplex-chat"'
+          mkdir -p raw
+          find -L result -name 'pkg-ios-*.zip' -exec cp {} raw/ \;
+
+      - name: Rozbalenie kniznic
+        run: |
+          mkdir -p apps/ios/Libraries/ios
+          cd apps/ios/Libraries/ios
+          unzip -o $GITHUB_WORKSPACE/raw/pkg-ios-*.zip
+          chmod u+w *.a
+          ls -la
+
+      - name: Import DIST certifikatu a adhoc profilov
+        env:
+          CERT_B64: ${{ secrets.DIST_CERTIFICATE_BASE64 }}
+          P12_PASS: ${{ secrets.DIST_P12_PASSWORD }}
+          PROFILES_B64: ${{ secrets.ADHOC_PROFILES_BASE64 }}
+        run: |
+          CERT_PATH=$RUNNER_TEMP/dist.p12
+          KEYCHAIN=$RUNNER_TEMP/build.keychain-db
+          KEYCHAIN_PASS=$(uuidgen)
+
+          echo -n "$CERT_B64" | base64 --decode -o $CERT_PATH
+          security create-keychain -p "$KEYCHAIN_PASS" $KEYCHAIN
+          security set-keychain-settings -lut 21600 $KEYCHAIN
+          security unlock-keychain -p "$KEYCHAIN_PASS" $KEYCHAIN
+          security import $CERT_PATH -P "$P12_PASS" -A -t cert -f pkcs12 -k $KEYCHAIN
+          security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PASS" $KEYCHAIN
+          security list-keychain -d user -s $KEYCHAIN
+
+          echo "=== identity ==="
+          security find-identity -v -p codesigning $KEYCHAIN
+
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          echo -n "$PROFILES_B64" | base64 --decode -o $RUNNER_TEMP/p.tar.gz
+          tar -xzf $RUNNER_TEMP/p.tar.gz -C ~/Library/MobileDevice/Provisioning\ Profiles/
+          ls -la ~/Library/MobileDevice/Provisioning\ Profiles/
+          rm $CERT_PATH $RUNNER_TEMP/p.tar.gz
+
+      - name: Archive
+        run: |
+          set -o pipefail
+          xcodebuild -project apps/ios/SimpleX.xcodeproj \
+            -scheme "SimpleX (iOS)" \
+            -configuration Release \
+            -sdk iphoneos \
+            -destination 'generic/platform=iOS' \
+            -archivePath $RUNNER_TEMP/Macet.xcarchive \
+            CODE_SIGN_STYLE=Manual \
+            DEVELOPMENT_TEAM=MHV67VMY8T \
+            CODE_SIGN_IDENTITY="Apple Distribution" \
+            PROVISIONING_PROFILE_SPECIFIER="Chat AdHoc App" \
+            archive 2>&1 | tee $RUNNER_TEMP/archive.log | tail -60
+
+      - name: Export ad-hoc IPA
+        run: |
+          cat > $RUNNER_TEMP/ExportOptions.plist <<'EOF'
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>method</key>
+            <string>ad-hoc</string>
+            <key>teamID</key>
+            <string>MHV67VMY8T</string>
+            <key>signingStyle</key>
+            <string>manual</string>
+            <key>provisioningProfiles</key>
+            <dict>
+              <key>eu.macet.chat</key>
+              <string>Chat AdHoc App</string>
+              <key>eu.macet.chat.NSE</key>
+              <string>Chat AdHoc NSE</string>
+              <key>eu.macet.chat.SE</key>
+              <string>Chat AdHoc SE</string>
+            </dict>
+            <key>compileBitcode</key>
+            <false/>
+            <key>stripSwiftSymbols</key>
+            <true/>
+          </dict>
+          </plist>
+          EOF
+
+          xcodebuild -exportArchive \
+            -archivePath $RUNNER_TEMP/Macet.xcarchive \
+            -exportPath $RUNNER_TEMP/export \
+            -exportOptionsPlist $RUNNER_TEMP/ExportOptions.plist 2>&1 | tail -40
+
+          echo "=== vysledok ==="
+          ls -la $RUNNER_TEMP/export/
+
+      - name: Nahranie IPA
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: macet-adhoc-ipa
+          path: ${{ runner.temp }}/export/*.ipa
+          if-no-files-found: warn
+
+      - name: Nahranie logu
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: adhoc-archive-log
+          path: ${{ runner.temp }}/archive.log
+          if-no-files-found: ignore
